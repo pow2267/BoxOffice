@@ -7,13 +7,81 @@
 
 import UIKit
 
-class TableViewController: UIViewController, UITableViewDataSource {
+class TableViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [Movie] = []
     let tableViewCellIdentifier: String = "tableViewCell"
+    var orderBy: Int = 0
     
+    @IBAction func touchUpSettingIcon() {
+        self.showAlertController(style: UIAlertController.Style.actionSheet)
+    }
+    
+    func showAlertController(style: UIAlertController.Style) {
+        let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
+        
+        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.orderBy = 0
+            requestMovies(self.orderBy)
+        })
+        
+        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.orderBy = 1
+            requestMovies(self.orderBy)
+        })
+        
+        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.orderBy = 2
+            requestMovies(self.orderBy)
+        })
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
+        
+        alertController.addAction(reservationRateAction)
+        alertController.addAction(curationAction)
+        alertController.addAction(releaseDateAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func didReceiveMoviesNotification(_ noti: Notification) {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            return
+        }
+        
+        self.movies = movies
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            
+            switch self.orderBy {
+            case 1:
+                self.navigationItem.title = "큐레이션"
+            case 2:
+                self.navigationItem.title = "개봉일"
+            default:
+                self.navigationItem.title = "예매율"
+            }
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        requestMovies(self.orderBy)
+    }
+}
+
+extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.movies.count
     }
@@ -62,30 +130,4 @@ class TableViewController: UIViewController, UITableViewDataSource {
         
         return cell
     }
-    
-    @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
-            return
-        }
-        
-        self.movies = movies
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // Todo: 정렬 순서 동적으로 적용 필요
-        requestMovies(0)
-    }
 }
-
