@@ -29,6 +29,17 @@ class TableViewController: UIViewController, UITableViewDataSource {
         cell.detailLabel.text = movie.detail
         cell.releaseDateLabel.text = movie.releaseDate
         
+        switch movie.grade {
+        case 12:
+            cell.ratesImage.image = UIImage(named: "ic_12")
+        case 15:
+            cell.ratesImage.image = UIImage(named: "ic_15")
+        case 19:
+            cell.ratesImage.image = UIImage(named: "ic_19")
+        default:
+            cell.ratesImage.image = UIImage(named: "ic_allages")
+        }
+        
         return cell
     }
     
