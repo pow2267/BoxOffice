@@ -52,10 +52,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hyR-rZ-mWB">
-                                                    <rect key="frame" x="10" y="0.0" width="90" height="120.5"/>
+                                                    <rect key="frame" x="10" y="5" width="90" height="110.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="120" id="OUu-2D-Nz5"/>
-                                                        <constraint firstAttribute="width" constant="90" id="Ww8-vR-W4Z"/>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="90" id="Ww8-vR-W4Z"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="110" id="gfu-Hl-2qQ"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="85" id="nZA-Mg-QGU"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ly-1k-MD2">
@@ -95,13 +96,13 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="hyR-rZ-mWB" secondAttribute="bottom" id="3va-Xx-hcj"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="9O1-M6-YOS" secondAttribute="trailing" constant="10" id="6gv-YY-DEO"/>
+                                                <constraint firstItem="hyR-rZ-mWB" firstAttribute="top" secondItem="X5N-kW-i0L" secondAttribute="top" constant="5" id="FoD-z4-fu8"/>
                                                 <constraint firstItem="nUK-T0-eXC" firstAttribute="leading" secondItem="4ly-1k-MD2" secondAttribute="trailing" constant="5" id="KCI-dd-1S9"/>
                                                 <constraint firstItem="4ly-1k-MD2" firstAttribute="top" secondItem="X5N-kW-i0L" secondAttribute="topMargin" constant="12" id="Thm-jY-XBC"/>
+                                                <constraint firstAttribute="bottom" secondItem="hyR-rZ-mWB" secondAttribute="bottom" constant="5" id="Vp6-iq-eLZ"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ckd-zg-6lu" secondAttribute="trailing" constant="10" id="XB1-zn-P5W"/>
                                                 <constraint firstItem="ckd-zg-6lu" firstAttribute="leading" secondItem="hyR-rZ-mWB" secondAttribute="trailing" constant="10" id="a6L-nz-cbZ"/>
-                                                <constraint firstItem="hyR-rZ-mWB" firstAttribute="top" secondItem="X5N-kW-i0L" secondAttribute="top" id="b2t-0J-oIO"/>
                                                 <constraint firstItem="hyR-rZ-mWB" firstAttribute="leading" secondItem="X5N-kW-i0L" secondAttribute="leading" constant="10" id="cAc-TJ-qmq"/>
                                                 <constraint firstItem="9O1-M6-YOS" firstAttribute="leading" secondItem="hyR-rZ-mWB" secondAttribute="trailing" constant="10" id="jlr-ZP-mlI"/>
                                                 <constraint firstItem="9O1-M6-YOS" firstAttribute="top" secondItem="4ly-1k-MD2" secondAttribute="bottom" id="mQ7-sy-0ez"/>
