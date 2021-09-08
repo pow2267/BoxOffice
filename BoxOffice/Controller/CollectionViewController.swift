@@ -1,18 +1,18 @@
 //
-//  ViewController.swift
+//  CollectionViewController.swift
 //  BoxOffice
 //
-//  Created by kwon on 2021/09/07.
+//  Created by kwon on 2021/09/08.
 //
 
 import UIKit
 
-class TableViewController: UIViewController {
+class CollectionViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var collectionView: UICollectionView!
+
     var movies: [Movie] = []
-    let tableViewCellIdentifier: String = "tableViewCell"
+    let collectionViewCellIdentifier: String = "collectionViewCell"
     var orderBy: Int = 0
     
     @IBAction func touchUpSettingIcon() {
@@ -55,7 +55,7 @@ class TableViewController: UIViewController {
         self.movies = movies
         
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
             
             switch self.orderBy {
             case 1:
@@ -71,6 +71,22 @@ class TableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height
+        var length: CGFloat = floor(width / 2.0)
+        
+        // 가로 모드일 때
+        if width > height {
+            length = floor(height / 2.0)
+        }
+        
+        let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = 5
+        flowLayout.itemSize = CGSize(width: length, height: length * 2)
+        
+        self.collectionView.collectionViewLayout = flowLayout
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
     }
     
@@ -79,23 +95,34 @@ class TableViewController: UIViewController {
         
         requestMovies(self.orderBy)
     }
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
 }
 
-extension TableViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension CollectionViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.movies.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell: TableViewCell = self.tableView.dequeueReusableCell(withIdentifier: self.tableViewCellIdentifier, for: indexPath) as? TableViewCell else {
-            preconditionFailure("커스텀 테이블 뷰 셀 오류")
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell: CollectionViewCell = self.collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewCellIdentifier, for: indexPath) as? CollectionViewCell else {
+            preconditionFailure("커스텀 콜렉션 뷰 셀 오류")
         }
-
+        
         let movie: Movie = self.movies[indexPath.row]
         
         cell.movieLabel.text = movie.title
-        cell.detailLabel.text = movie.detail
-        cell.releaseDateLabel.text = movie.releaseDate
+        cell.detailLabel.text = movie.detailForCollectionView
+        cell.releaseDateLabel.text = movie.releaseDateForCollectionView
         
         switch movie.grade {
         case 12:
@@ -119,8 +146,8 @@ extension TableViewController: UITableViewDataSource {
             
             DispatchQueue.main.async {
                 // image를 셋팅하기 전에 사용자가 스크롤을 하면 화면에 보여지는 cell의 index가 달라질 수 있으므로 index 비교 후 이미지 삽입
-                if let index: IndexPath = tableView.indexPath(for: cell) {
-                    if index.row == indexPath.row {
+                for visibleCell in collectionView.visibleCells {
+                    if collectionView.indexPath(for: visibleCell) != nil {
                         cell.posterView.image = UIImage(data: imageData)
                         cell.setNeedsLayout()
                     }

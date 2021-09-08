@@ -27,12 +27,20 @@ struct Movie: Codable {
     let date: String
     let id: String
     
-    var detail: String {
+    var detailForTableView: String {
         return "평점 : \(userRating) 예매 순위 : \(reservationGrade) 예매율 : \(reservationRate)"
     }
     
-    var releaseDate: String {
+    var detailForCollectionView: String {
+        return "\(reservationGrade)위 (\(userRating)) / \(reservationRate)%"
+    }
+    
+    var releaseDateForTableView: String {
         return "개봉일 : \(date)"
+    }
+    
+    var releaseDateForCollectionView: String {
+        return "\(date)"
     }
     
     enum CodingKeys: String, CodingKey {
