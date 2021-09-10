@@ -257,7 +257,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="QOW-ax-zqL">
             <objects>
-                <tabBarController id="Ih8-Cl-hcb" sceneMemberID="viewController">
+                <tabBarController id="Ih8-Cl-hcb" customClass="TabBarController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="MPW-dY-Ys1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

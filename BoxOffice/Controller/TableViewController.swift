@@ -11,9 +11,8 @@ class TableViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var movies: [Movie] = []
     let tableViewCellIdentifier: String = "tableViewCell"
-    var orderBy: Int = 0
+    var tabBar: TabBarController?
     
     @IBAction func touchUpSettingIcon() {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
@@ -23,18 +22,18 @@ class TableViewController: UIViewController {
         let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
         
         let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.orderBy = 0
-            requestMovies(self.orderBy)
+            self.tabBar?.orderBy = 0
+            requestMovies(0)
         })
         
         let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.orderBy = 1
-            requestMovies(self.orderBy)
+            self.tabBar?.orderBy = 1
+            requestMovies(1)
         })
         
         let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.orderBy = 2
-            requestMovies(self.orderBy)
+            self.tabBar?.orderBy = 2
+            requestMovies(2)
         })
         
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
@@ -47,29 +46,39 @@ class TableViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func setNavigationTitle(orderBy: Int) {
+        switch orderBy {
+        case 1:
+            self.navigationItem.title = "큐레이션"
+        case 2:
+            self.navigationItem.title = "개봉일"
+        default:
+            self.navigationItem.title = "예매율"
+        }
+    }
+    
     @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie], let tabBar = self.tabBar else {
             return
         }
         
-        self.movies = movies
+        tabBar.movies = movies
         
         DispatchQueue.main.async {
             self.tableView.reloadData()
-            
-            switch self.orderBy {
-            case 1:
-                self.navigationItem.title = "큐레이션"
-            case 2:
-                self.navigationItem.title = "개봉일"
-            default:
-                self.navigationItem.title = "예매율"
-            }
+            self.setNavigationTitle(orderBy: tabBar.orderBy)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let tabBar = self.tabBarController as? TabBarController else {
+            return
+        }
+        
+        self.tabBar = tabBar
+        self.setNavigationTitle(orderBy: tabBar.orderBy)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
     }
@@ -77,13 +86,15 @@ class TableViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        requestMovies(self.orderBy)
+        if self.tabBar?.movies.count == 0 {
+            requestMovies(self.tabBar?.orderBy ?? 0)
+        }
     }
 }
 
 extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.movies.count
+        self.tabBar?.movies.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -91,7 +102,9 @@ extension TableViewController: UITableViewDataSource {
             preconditionFailure("커스텀 테이블 뷰 셀 오류")
         }
 
-        let movie: Movie = self.movies[indexPath.row]
+        guard let movie: Movie = self.tabBar?.movies[indexPath.row] else {
+            preconditionFailure("데이터 조회 오류")
+        }
         
         cell.movieLabel.text = movie.title
         cell.detailLabel.text = movie.detailForTableView
