@@ -221,6 +221,7 @@
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="Njf-1C-hzF" id="hqF-Q5-78b"/>
+                                    <outlet property="delegate" destination="Njf-1C-hzF" id="40j-Qp-0Cu"/>
                                 </connections>
                             </tableView>
                         </subviews>

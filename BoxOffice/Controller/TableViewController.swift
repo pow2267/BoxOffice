@@ -13,6 +13,15 @@ class TableViewController: UIViewController {
     
     let tableViewCellIdentifier: String = "tableViewCell"
     var tabBar: TabBarController?
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    @objc func refresh() {
+        requestMovies(self.tabBar?.orderBy ?? 0)
+    }
     
     @IBAction func touchUpSettingIcon() {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
@@ -67,6 +76,10 @@ class TableViewController: UIViewController {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.setNavigationTitle(orderBy: tabBar.orderBy)
+            
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
         }
     }
     
@@ -79,6 +92,7 @@ class TableViewController: UIViewController {
         
         self.tabBar = tabBar
         self.setNavigationTitle(orderBy: tabBar.orderBy)
+        self.tableView.refreshControl = self.refreshControl
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
     }
