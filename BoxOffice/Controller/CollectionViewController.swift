@@ -13,6 +13,15 @@ class CollectionViewController: UIViewController {
 
     let collectionViewCellIdentifier: String = "collectionViewCell"
     var tabBar: TabBarController?
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    @objc func refresh() {
+        requestMovies(self.tabBar?.orderBy ?? 0)
+    }
     
     @IBAction func touchUpSettingIcon() {
         self.showAlertController(style: UIAlertController.Style.actionSheet)
@@ -47,41 +56,43 @@ class CollectionViewController: UIViewController {
     }
     
     @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+        guard let tabBar = self.tabBar, let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
             return
         }
         
-        self.tabBar?.movies = movies
+        tabBar.movies = movies
         
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.setNavigationTitle(orderBy: tabBar.orderBy)
             
-            switch self.tabBar?.orderBy {
-            case 1:
-                self.navigationItem.title = "큐레이션"
-            case 2:
-                self.navigationItem.title = "개봉일"
-            default:
-                self.navigationItem.title = "예매율"
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
             }
+        }
+    }
+    
+    func setNavigationTitle(orderBy: Int) {
+        switch orderBy {
+        case 1:
+            self.navigationItem.title = "큐레이션"
+        case 2:
+            self.navigationItem.title = "개봉일"
+        default:
+            self.navigationItem.title = "예매율"
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let tabBar = self.tabBarController as? TabBarController {
-            self.tabBar = tabBar
-            
-            switch tabBar.orderBy {
-            case 1:
-                self.navigationItem.title = "큐레이션"
-            case 2:
-                self.navigationItem.title = "개봉일"
-            default:
-                self.navigationItem.title = "예매율"
-            }
+        guard let tabBar = self.tabBarController as? TabBarController else {
+            return
         }
+        
+        self.tabBar = tabBar
+        self.setNavigationTitle(orderBy: tabBar.orderBy)
+        self.collectionView.refreshControl = self.refreshControl
         
         let width = UIScreen.main.bounds.width
         let height = UIScreen.main.bounds.height
