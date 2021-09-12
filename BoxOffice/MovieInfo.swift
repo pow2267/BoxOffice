@@ -31,6 +31,10 @@ struct MovieInfo: Codable {
         return "\(genre) / \(duration)분"
     }
     
+    var reservation: String {
+        return "\(reservationGrade)위 \(reservationRate)%"
+    }
+    
     enum CodingKeys: String, CodingKey {
         case audience, actor, duration, director, synopsis, genre, grade, image, title, date, id
         case reservationGrade = "reservation_grade"

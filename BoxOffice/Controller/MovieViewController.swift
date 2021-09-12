@@ -13,10 +13,23 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var gerneLabel: UILabel!
-    @IBOutlet weak var ratesImage: UIImageView!
+    @IBOutlet weak var rateImage: UIImageView!
+    @IBOutlet weak var reservationRateLabel: UILabel!
+    @IBOutlet weak var userRatingLabel: UILabel!
+    @IBOutlet weak var audienceLabel: UILabel!
+    @IBOutlet weak var star1: UIImageView!
+    @IBOutlet weak var star2: UIImageView!
+    @IBOutlet weak var star3: UIImageView!
+    @IBOutlet weak var star4: UIImageView!
+    @IBOutlet weak var star5: UIImageView!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
+    var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        return numberFormatter
+    }
     
     @objc func didReceiveMovieInfoNotification(_ noti: Notification) {
         guard let movieInfo: MovieInfo = noti.userInfo?["movie"] as? MovieInfo else {
@@ -29,19 +42,67 @@ class MovieViewController: UIViewController {
             self.titleLabel.text = movieInfo.title
             self.releaseDateLabel.text = movieInfo.releaseDate
             self.gerneLabel.text = movieInfo.genreAndDuration
+            self.reservationRateLabel.text = movieInfo.reservation
+            self.userRatingLabel.text = String(movieInfo.userRating)
+            self.audienceLabel.text = self.numberFormatter.string(from: NSNumber(value: movieInfo.audience))
+            
+            switch movieInfo.grade {
+            case 12:
+                self.rateImage.image = UIImage(named: "ic_12")
+            case 15:
+                self.rateImage.image = UIImage(named: "ic_15")
+            case 19:
+                self.rateImage.image = UIImage(named: "ic_19")
+            default:
+                self.rateImage.image = UIImage(named: "ic_allages")
+            }
+            
+            if movieInfo.userRating >= 1.0 {
+                self.star1.image = UIImage(named: "ic_star_large_half")
+            }
+             
+            if movieInfo.userRating >= 2.0 {
+                self.star1.image = UIImage(named: "ic_star_large_full")
+            }
+            
+            if movieInfo.userRating >= 3.0 {
+                self.star2.image = UIImage(named: "ic_star_large_half")
+            }
+            
+            if movieInfo.userRating >= 4.0 {
+                self.star2.image = UIImage(named: "ic_star_large_full")
+            }
+            
+            if movieInfo.userRating >= 5.0 {
+                self.star3.image = UIImage(named: "ic_star_large_half")
+            }
+            
+            if movieInfo.userRating >= 6.0 {
+                self.star3.image = UIImage(named: "ic_star_large_full")
+            }
+            
+            if movieInfo.userRating >= 7.0 {
+                self.star4.image = UIImage(named: "ic_star_large_half")
+            }
+            
+            if movieInfo.userRating >= 8.0 {
+                self.star4.image = UIImage(named: "ic_star_large_full")
+            }
+            
+            if movieInfo.userRating >= 9.0 {
+                self.star5.image = UIImage(named: "ic_star_large_half")
+            }
+            
+            if movieInfo.userRating == 10.0 {
+                self.star5.image = UIImage(named: "ic_star_large_full")
+            }
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = movie?.title
-
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
         guard let movie = self.movie else {
             return
@@ -49,16 +110,7 @@ class MovieViewController: UIViewController {
         
         requestMovieInfo(movie.id)
         
-        switch movie.grade {
-        case 12:
-            self.ratesImage.image = UIImage(named: "ic_12")
-        case 15:
-            self.ratesImage.image = UIImage(named: "ic_15")
-        case 19:
-            self.ratesImage.image = UIImage(named: "ic_19")
-        default:
-            self.ratesImage.image = UIImage(named: "ic_allages")
-        }
+        self.navigationItem.title = movie.title
         
         DispatchQueue.global().async {
             // Data는 동기 메소드라서 이미지를 불러올 때까지 앱이 프리징되는 걸 막기 위해 백그라운드 큐에 넣어줌
