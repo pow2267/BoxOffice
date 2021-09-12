@@ -9,6 +9,7 @@ import UIKit
 
 class MovieViewController: UIViewController {
     
+    @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var gerneLabel: UILabel!
@@ -57,6 +58,17 @@ class MovieViewController: UIViewController {
             self.ratesImage.image = UIImage(named: "ic_19")
         default:
             self.ratesImage.image = UIImage(named: "ic_allages")
+        }
+        
+        DispatchQueue.global().async {
+            // Data는 동기 메소드라서 이미지를 불러올 때까지 앱이 프리징되는 걸 막기 위해 백그라운드 큐에 넣어줌
+            guard let imageUrl: URL = URL(string: movie.thumb), let imageData: Data = try? Data(contentsOf: imageUrl) else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.posterImageView.image = UIImage(data: imageData)
+            }
         }
     }
 

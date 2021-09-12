@@ -157,7 +157,7 @@ extension TableViewController: UITableViewDataSource {
         cell.posterView.image = nil
         
         DispatchQueue.global().async {
-            // Data는 동기 메소드라서 이미지를 불러올 때까지 동작이 멈추게 됨. 그럼 불편하니까 백그라운드 큐에 넣어줌
+            // Data는 동기 메소드라서 이미지를 불러올 때까지 앱이 프리징되는 걸 막기 위해 백그라운드 큐에 넣어줌
             guard let imageUrl: URL = URL(string: movie.thumb), let imageData: Data = try? Data(contentsOf: imageUrl) else {
                 return
             }
@@ -174,5 +174,12 @@ extension TableViewController: UITableViewDataSource {
         }
         
         return cell
+    }
+}
+
+extension TableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 이전에 선택했던 cell이 계속 회색으로 표시되는 것 방지
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
 }
