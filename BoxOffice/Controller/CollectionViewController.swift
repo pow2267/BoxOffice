@@ -110,7 +110,7 @@ class CollectionViewController: UIViewController {
         
         self.collectionView.collectionViewLayout = flowLayout
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNotification, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {

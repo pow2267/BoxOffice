@@ -94,15 +94,33 @@ class TableViewController: UIViewController {
         self.setNavigationTitle(orderBy: tabBar.orderBy)
         self.tableView.refreshControl = self.refreshControl
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNofitication, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNotification, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         if self.tabBar?.movies.count == 0 {
             requestMovies(self.tabBar?.orderBy ?? 0)
         }
+    }
+    
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        guard let movieViewController = segue.destination as? MovieViewController else {
+            return
+        }
+        
+        guard let selectedCell: UITableViewCell = sender as? UITableViewCell, let index = self.tableView.indexPath(for: selectedCell) else {
+            return
+        }
+        
+        movieViewController.movie = tabBar.movies[index.row]
     }
 }
 
