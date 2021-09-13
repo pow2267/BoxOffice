@@ -22,6 +22,7 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var star3: UIImageView!
     @IBOutlet weak var star4: UIImageView!
     @IBOutlet weak var star5: UIImageView!
+    @IBOutlet weak var synopsis: UILabel!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
@@ -96,6 +97,8 @@ class MovieViewController: UIViewController {
             if movieInfo.userRating == 10.0 {
                 self.star5.image = UIImage(named: "ic_star_large_full")
             }
+            
+            self.synopsis.text = movieInfo.synopsis
         }
     }
 
