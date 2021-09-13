@@ -23,6 +23,8 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var star4: UIImageView!
     @IBOutlet weak var star5: UIImageView!
     @IBOutlet weak var synopsis: UILabel!
+    @IBOutlet weak var directors: UILabel!
+    @IBOutlet weak var actors: UILabel!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
@@ -99,6 +101,8 @@ class MovieViewController: UIViewController {
             }
             
             self.synopsis.text = movieInfo.synopsis
+            self.directors.text = movieInfo.director
+            self.actors.text = movieInfo.actor
         }
     }
 
