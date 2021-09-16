@@ -25,6 +25,8 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var synopsis: UILabel!
     @IBOutlet weak var directors: UILabel!
     @IBOutlet weak var actors: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
@@ -130,6 +132,12 @@ class MovieViewController: UIViewController {
             }
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        self.tableViewHeight.constant = self.tableView.contentSize.height
+    }
 
     /*
     // MARK: - Navigation
@@ -141,4 +149,17 @@ class MovieViewController: UIViewController {
     }
     */
 
+}
+
+extension MovieViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        return cell
+    }
 }
