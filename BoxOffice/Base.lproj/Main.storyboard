@@ -515,7 +515,7 @@
                                                             <constraint firstAttribute="height" constant="150" id="opW-82-ELf"/>
                                                         </constraints>
                                                         <prototypes>
-                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="90" id="fXm-8k-RTO">
+                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="90" id="fXm-8k-RTO" customClass="CommentTableViewCell" customModule="BoxOffice" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="24.5" width="394" height="90"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fXm-8k-RTO" id="7Q8-dm-6xN">
@@ -589,10 +589,14 @@
                                                                         <constraint firstItem="jOB-xc-rF3" firstAttribute="leading" secondItem="C7A-vw-Hpp" secondAttribute="trailing" constant="10" id="yUJ-nk-pRs"/>
                                                                     </constraints>
                                                                 </tableViewCellContentView>
+                                                                <connections>
+                                                                    <outlet property="commentLabel" destination="9lZ-1Z-Dx9" id="WwI-Q7-JmN"/>
+                                                                </connections>
                                                             </tableViewCell>
                                                         </prototypes>
                                                         <connections>
                                                             <outlet property="dataSource" destination="ZnB-eL-C0H" id="ofO-l8-Y27"/>
+                                                            <outlet property="delegate" destination="ZnB-eL-C0H" id="1YI-71-F6k"/>
                                                         </connections>
                                                     </tableView>
                                                 </subviews>

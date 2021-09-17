@@ -30,10 +30,24 @@ class MovieViewController: UIViewController {
     
     var movie: Movie?
     var movieInfo: MovieInfo?
+    var comments: [Comment]?
+    
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         return numberFormatter
+    }
+    
+    @objc func didReceiveCommentNotification(_ noti: Notification) {
+        guard let comments: [Comment] = noti.userInfo?["comments"] as? [Comment] else {
+            return
+        }
+        
+        self.comments = comments
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     @objc func didReceiveMovieInfoNotification(_ noti: Notification) {
@@ -113,11 +127,17 @@ class MovieViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveCommentNotification(_:)), name: DidReceiveCommentNotification, object: nil)
+        
         guard let movie = self.movie else {
             return
         }
         
         requestMovieInfo(movie.id)
+        
+        if self.comments == nil {
+            requestComments(movie.id)
+        }
         
         self.navigationItem.title = movie.title
         
@@ -131,12 +151,6 @@ class MovieViewController: UIViewController {
                 self.posterImageView.image = UIImage(data: imageData)
             }
         }
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        self.tableViewHeight.constant = self.tableView.contentSize.height
     }
 
     /*
@@ -153,13 +167,29 @@ class MovieViewController: UIViewController {
 
 extension MovieViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return 10
+        return self.comments?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell: CommentTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CommentTableViewCell else {
+            preconditionFailure("테이블 뷰 셀 오류")
+        }
+        
+        guard let comment = self.comments?[indexPath.row] else {
+            preconditionFailure("코멘트를 불러올 수 없음")
+        }
+        
+        // cell.nicknameLabel.text = comment.writer
+        cell.commentLabel.text = comment.contents
         
         return cell
+    }
+}
+
+extension MovieViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.tableViewHeight.constant = self.tableView.contentSize.height
+        }
     }
 }

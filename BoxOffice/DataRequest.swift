@@ -9,6 +9,7 @@ import Foundation
 
 let DidReceiveMoviesNotification: Notification.Name = Notification.Name("DidReceiveMovies")
 let DidReceiveMovieInfoNotification: Notification.Name = Notification.Name("DidReceiveMovieInfo")
+let DidReceiveCommentNotification: Notification.Name = Notification.Name("DidReceiveComment")
 
 func requestMovies(_ orderType: Int) {
     guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type=\(orderType)") else {
@@ -61,6 +62,35 @@ func requestMovieInfo(_ id: String) {
             let apiResponse: MovieInfo = try JSONDecoder().decode(MovieInfo.self, from: data)
             
             NotificationCenter.default.post(name: DidReceiveMovieInfoNotification, object: nil, userInfo: ["movie": apiResponse])
+        } catch (let err) {
+            print(err.localizedDescription)
+        }
+    })
+    
+    dataTask.resume()
+}
+
+func requestComments(_ id: String) {
+    guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/comments?movie_id=\(id)") else {
+        return
+    }
+    
+    let session: URLSession = URLSession(configuration: .default)
+    
+    let dataTask: URLSessionDataTask = session.dataTask(with: url, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) in
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        guard let data = data else {
+            return
+        }
+        
+        do {
+            let apiResponse: CommentsResponse = try JSONDecoder().decode(CommentsResponse.self, from: data)
+            
+            NotificationCenter.default.post(name: DidReceiveCommentNotification, object: nil, userInfo: ["comments": apiResponse.comments])
         } catch (let err) {
             print(err.localizedDescription)
         }

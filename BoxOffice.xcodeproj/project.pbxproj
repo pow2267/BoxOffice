@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76C0444F26F38E4900E35769 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */; };
+		76C0445226F3996300E35769 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0445126F3996300E35769 /* Comment.swift */; };
 		76D9C8D926E7960B000E72D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8D826E7960B000E72D5 /* AppDelegate.swift */; };
 		76D9C8DB26E7960B000E72D5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */; };
 		76D9C8DD26E7960B000E72D5 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8DC26E7960B000E72D5 /* TableViewController.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		76C0445126F3996300E35769 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		76D9C8D526E7960B000E72D5 /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76D9C8D826E7960B000E72D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +57,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		76C0445026F3994C00E35769 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				76D9C90826EB635D000E72D5 /* MovieInfo.swift */,
+				76D9C8EE26E7A3D9000E72D5 /* Movie.swift */,
+				76C0445126F3996300E35769 /* Comment.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		76D9C8CC26E7960B000E72D5 = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +86,7 @@
 		76D9C8D726E7960B000E72D5 /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
+				76C0445026F3994C00E35769 /* Model */,
 				76D9C8FF26E8D742000E72D5 /* Controller */,
 				76D9C8D826E7960B000E72D5 /* AppDelegate.swift */,
 				76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */,
@@ -80,10 +95,9 @@
 				76D9C8E126E7960F000E72D5 /* Assets.xcassets */,
 				76D9C8E326E7960F000E72D5 /* LaunchScreen.storyboard */,
 				76D9C8E626E7960F000E72D5 /* Info.plist */,
-				76D9C8EE26E7A3D9000E72D5 /* Movie.swift */,
 				76D9C8F026E7ADE7000E72D5 /* DataRequest.swift */,
 				76D9C90026E8DB78000E72D5 /* CollectionViewCell.swift */,
-				76D9C90826EB635D000E72D5 /* MovieInfo.swift */,
+				76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */,
 			);
 			path = BoxOffice;
 			sourceTree = "<group>";
@@ -176,6 +190,8 @@
 				76D9C8D926E7960B000E72D5 /* AppDelegate.swift in Sources */,
 				76D9C90526E8FA7C000E72D5 /* TabBarController.swift in Sources */,
 				76D9C8F126E7ADE7000E72D5 /* DataRequest.swift in Sources */,
+				76C0444F26F38E4900E35769 /* CommentTableViewCell.swift in Sources */,
+				76C0445226F3996300E35769 /* Comment.swift in Sources */,
 				76D9C8FE26E8D736000E72D5 /* CollectionViewController.swift in Sources */,
 				76D9C8DB26E7960B000E72D5 /* SceneDelegate.swift in Sources */,
 				76D9C8EF26E7A3D9000E72D5 /* Movie.swift in Sources */,
