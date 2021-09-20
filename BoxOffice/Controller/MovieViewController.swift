@@ -38,6 +38,12 @@ class MovieViewController: UIViewController {
         return numberFormatter
     }
     
+    var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter
+    }
+    
     @objc func didReceiveCommentNotification(_ noti: Notification) {
         guard let comments: [Comment] = noti.userInfo?["comments"] as? [Comment] else {
             return
@@ -57,6 +63,7 @@ class MovieViewController: UIViewController {
         
         self.movieInfo = movieInfo
         
+        // Q. 왜 main 스레드에 넣어야 하나요?
         DispatchQueue.main.async {
             self.titleLabel.text = movieInfo.title
             self.releaseDateLabel.text = movieInfo.releaseDate
@@ -179,8 +186,56 @@ extension MovieViewController: UITableViewDataSource {
             preconditionFailure("코멘트를 불러올 수 없음")
         }
         
-        // cell.nicknameLabel.text = comment.writer
+        cell.nicknameLabel.text = comment.writer
         cell.commentLabel.text = comment.contents
+        cell.creationDateLabel.text = self.dateFormatter.string(from: NSDate(timeIntervalSince1970: comment.timestamp) as Date)
+        
+        // 별 이미지 초기화
+        cell.star1.image = UIImage(named: "ic_star_large")
+        cell.star2.image = UIImage(named: "ic_star_large")
+        cell.star3.image = UIImage(named: "ic_star_large")
+        cell.star4.image = UIImage(named: "ic_star_large")
+        cell.star5.image = UIImage(named: "ic_star_large")
+        
+        if comment.rating >= 1.0 {
+            cell.star1.image = UIImage(named: "ic_star_large_half")
+        }
+         
+        if comment.rating >= 2.0 {
+            cell.star1.image = UIImage(named: "ic_star_large_full")
+        }
+        
+        if comment.rating >= 3.0 {
+            cell.star2.image = UIImage(named: "ic_star_large_half")
+        }
+        
+        if comment.rating >= 4.0 {
+            cell.star2.image = UIImage(named: "ic_star_large_full")
+        }
+        
+        if comment.rating >= 5.0 {
+            cell.star3.image = UIImage(named: "ic_star_large_half")
+        }
+        
+        if comment.rating >= 6.0 {
+            cell.star3.image = UIImage(named: "ic_star_large_full")
+        }
+        
+        if comment.rating >= 7.0 {
+            cell.star4.image = UIImage(named: "ic_star_large_half")
+        }
+        
+        if comment.rating >= 8.0 {
+            cell.star4.image = UIImage(named: "ic_star_large_full")
+        }
+        
+        if comment.rating >= 9.0 {
+            cell.star5.image = UIImage(named: "ic_star_large_half")
+        }
+        
+        if comment.rating == 10.0 {
+            cell.star5.image = UIImage(named: "ic_star_large_full")
+        }
         
         return cell
     }
