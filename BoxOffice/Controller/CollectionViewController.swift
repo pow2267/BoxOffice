@@ -121,16 +121,23 @@ class CollectionViewController: UIViewController {
         }
     }
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        guard let movieViewController = segue.destination as? MovieViewController else {
+            return
+        }
+        
+        guard let selectedCell: CollectionViewCell = sender as? CollectionViewCell, let index = self.collectionView.indexPath(for: selectedCell) else {
+            return
+        }
+        
+        movieViewController.movie = tabBar.movies[index.row]
     }
-    */
-
 }
 
 extension CollectionViewController: UICollectionViewDataSource {
