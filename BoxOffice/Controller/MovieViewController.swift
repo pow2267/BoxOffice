@@ -27,6 +27,7 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var actors: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var commentButton: UIImageView!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
@@ -42,6 +43,14 @@ class MovieViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter
+    }
+    
+    @objc func touchUpCommentButton() {
+        guard let commentViewController = UIStoryboard.init(name: "Main", bundle: .main).instantiateViewController(identifier: "commentViewController") as? CommentViewController else {
+            return
+        }
+        
+        self.present(commentViewController, animated: true, completion: nil)
     }
     
     @objc func dismissFullscreen(_ sender: UITapGestureRecognizer) {
@@ -194,9 +203,13 @@ class MovieViewController: UIViewController {
             }
         }
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
-        self.posterImageView.addGestureRecognizer(gestureRecognizer)
+        let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
+        self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
         self.posterImageView.isUserInteractionEnabled = true
+        
+        let commentButtonTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpCommentButton))
+        self.commentButton.addGestureRecognizer(commentButtonTapGestureRecognizer)
+        self.commentButton.isUserInteractionEnabled = true
     }
 
     /*
