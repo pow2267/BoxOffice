@@ -44,6 +44,41 @@ class MovieViewController: UIViewController {
         return dateFormatter
     }
     
+    @objc func dismissFullscreen(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+        sender.view?.removeFromSuperview()
+    }
+    
+    @objc func touchUpMoviePoster() {
+        let newImageView = UIImageView()
+        newImageView.frame = UIScreen.main.bounds
+        newImageView.backgroundColor = UIColor.black
+        newImageView.contentMode = .scaleAspectFit
+        newImageView.isUserInteractionEnabled = true
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
+        newImageView.addGestureRecognizer(gestureRecognizer)
+        
+        self.view.addSubview(newImageView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+        
+        DispatchQueue.global().async {
+            guard let movieInfo = self.movieInfo, let imageUrl: URL = URL(string: movieInfo.image), let imageData: Data = try? Data(contentsOf: imageUrl) else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                guard let image = UIImage(data: imageData) else {
+                    return
+                }
+
+                newImageView.image = image
+            }
+        }
+    }
+    
     @objc func didReceiveCommentNotification(_ noti: Notification) {
         guard let comments: [Comment] = noti.userInfo?["comments"] as? [Comment] else {
             return
@@ -158,6 +193,10 @@ class MovieViewController: UIViewController {
                 self.posterImageView.image = UIImage(data: imageData)
             }
         }
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
+        self.posterImageView.addGestureRecognizer(gestureRecognizer)
+        self.posterImageView.isUserInteractionEnabled = true
     }
 
     /*
