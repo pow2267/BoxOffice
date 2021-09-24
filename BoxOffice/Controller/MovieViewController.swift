@@ -113,8 +113,20 @@ class MovieViewController: UIViewController {
         
         self.movieInfo = movieInfo
         
+        DispatchQueue.global().async {
+            guard let imageUrl: URL = URL(string: movieInfo.image), let imageData: Data = try? Data(contentsOf: imageUrl) else {
+                return
+            }
+                
+            DispatchQueue.main.async {
+                self.posterImageView.image = UIImage(data: imageData)
+            }
+        }
+                
         // Q. 왜 main 스레드에 넣어야 하나요?
         DispatchQueue.main.async {
+            self.navigationItem.title = movieInfo.title
+                        
             self.titleLabel.text = movieInfo.title
             self.releaseDateLabel.text = movieInfo.releaseDate
             self.gerneLabel.text = movieInfo.genreAndDuration
@@ -132,6 +144,13 @@ class MovieViewController: UIViewController {
             default:
                 self.rateImage.image = UIImage(named: "ic_allages")
             }
+            
+            // reset stars
+            self.star1.image = UIImage(named: "ic_star_large")
+            self.star2.image = UIImage(named: "ic_star_large")
+            self.star3.image = UIImage(named: "ic_star_large")
+            self.star4.image = UIImage(named: "ic_star_large")
+            self.star5.image = UIImage(named: "ic_star_large")
             
             if movieInfo.userRating >= 1.0 {
                 self.star1.image = UIImage(named: "ic_star_large_half")
@@ -183,7 +202,6 @@ class MovieViewController: UIViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveCommentNotification(_:)), name: DidReceiveCommentNotification, object: nil)
         
         guard let movie = self.movie else {
@@ -191,23 +209,7 @@ class MovieViewController: UIViewController {
         }
         
         requestMovieInfo(movie.id)
-        
-        if self.comments == nil {
-            requestComments(movie.id)
-        }
-        
-        self.navigationItem.title = movie.title
-        
-        DispatchQueue.global().async {
-            // Data는 동기 메소드라서 이미지를 불러올 때까지 앱이 프리징되는 걸 막기 위해 백그라운드 큐에 넣어줌
-            guard let imageUrl: URL = URL(string: movie.thumb), let imageData: Data = try? Data(contentsOf: imageUrl) else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.posterImageView.image = UIImage(data: imageData)
-            }
-        }
+        requestComments(movie.id)
         
         let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
         self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
