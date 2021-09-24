@@ -821,7 +821,7 @@
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWU-rL-bMX">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWU-rL-bMX">
                                         <rect key="frame" x="0.0" y="135" width="414" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -904,7 +904,12 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="5Gi-EN-Lt5" id="Fup-GD-MMw"/>
+                        <outlet property="commentField" destination="GmZ-2Y-SYC" id="OeV-Ov-4RQ"/>
+                        <outlet property="gradeImage" destination="WvT-Rb-e9E" id="QjN-Rf-qh1"/>
+                        <outlet property="nicknameField" destination="1fu-4h-UQN" id="IG4-o9-HxS"/>
+                        <outlet property="rateLabel" destination="LWU-rL-bMX" id="7fs-j3-khx"/>
                         <outlet property="submitButton" destination="bv3-bH-yrX" id="ucG-Kc-n7d"/>
+                        <outlet property="titleLabel" destination="TbT-ak-Y77" id="ghe-F7-sWe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gzB-mZ-cYj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

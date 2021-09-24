@@ -50,6 +50,12 @@ class MovieViewController: UIViewController {
             return
         }
         
+        guard let movie = self.movie else {
+            return
+        }
+        
+        commentViewController.movie = movie
+        
         self.present(commentViewController, animated: true, completion: nil)
     }
     

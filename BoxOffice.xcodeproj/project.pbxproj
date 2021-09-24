@@ -10,6 +10,7 @@
 		76C0444F26F38E4900E35769 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */; };
 		76C0445226F3996300E35769 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0445126F3996300E35769 /* Comment.swift */; };
 		76C0445426FA16BB00E35769 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0445326FA16BB00E35769 /* CommentViewController.swift */; };
+		76C0445626FDCAD000E35769 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C0445526FDCAD000E35769 /* UserInfo.swift */; };
 		76D9C8D926E7960B000E72D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8D826E7960B000E72D5 /* AppDelegate.swift */; };
 		76D9C8DB26E7960B000E72D5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */; };
 		76D9C8DD26E7960B000E72D5 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D9C8DC26E7960B000E72D5 /* TableViewController.swift */; };
@@ -30,6 +31,7 @@
 		76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		76C0445126F3996300E35769 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		76C0445326FA16BB00E35769 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		76C0445526FDCAD000E35769 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		76D9C8D526E7960B000E72D5 /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76D9C8D826E7960B000E72D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				76D9C8F026E7ADE7000E72D5 /* DataRequest.swift */,
 				76D9C90026E8DB78000E72D5 /* CollectionViewCell.swift */,
 				76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */,
+				76C0445526FDCAD000E35769 /* UserInfo.swift */,
 			);
 			path = BoxOffice;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				76D9C8FE26E8D736000E72D5 /* CollectionViewController.swift in Sources */,
 				76D9C8DB26E7960B000E72D5 /* SceneDelegate.swift in Sources */,
 				76D9C8EF26E7A3D9000E72D5 /* Movie.swift in Sources */,
+				76C0445626FDCAD000E35769 /* UserInfo.swift in Sources */,
 				76D9C90926EB635D000E72D5 /* MovieInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
