@@ -782,42 +782,54 @@
                                                 <rect key="frame" x="0.0" y="25" width="414" height="60"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wyH-Np-YeV">
-                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="82" height="60"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="60" id="r4j-N5-RVf"/>
                                                             <constraint firstAttribute="height" constant="60" id="wO5-X4-waD"/>
                                                         </constraints>
                                                     </view>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l2m-ez-y69">
-                                                        <rect key="frame" x="60" y="0.0" width="294" height="60"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l2m-ez-y69" customClass="StarsStackView" customModule="BoxOffice" customModuleProvider="target">
+                                                        <rect key="frame" x="82" y="0.0" width="250" height="60"/>
                                                         <subviews>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star_large" translatesAutoresizingMaskIntoConstraints="NO" id="rlS-na-9qv">
-                                                                <rect key="frame" x="0.0" y="0.0" width="59" height="60"/>
-                                                            </imageView>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star_large" translatesAutoresizingMaskIntoConstraints="NO" id="j7H-ux-gM2">
-                                                                <rect key="frame" x="59" y="0.0" width="58.5" height="60"/>
-                                                            </imageView>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star_large" translatesAutoresizingMaskIntoConstraints="NO" id="eVa-bS-krf">
-                                                                <rect key="frame" x="117.5" y="0.0" width="59" height="60"/>
-                                                            </imageView>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star_large" translatesAutoresizingMaskIntoConstraints="NO" id="RC0-7D-jsP">
-                                                                <rect key="frame" x="176.5" y="0.0" width="58.5" height="60"/>
-                                                            </imageView>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star_large" translatesAutoresizingMaskIntoConstraints="NO" id="QRc-pJ-UWB">
-                                                                <rect key="frame" x="235" y="0.0" width="59" height="60"/>
-                                                            </imageView>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbk-F7-E9j">
+                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="60"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                <state key="normal" title="Button" image="ic_star_large"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xtH-pc-Kp6">
+                                                                <rect key="frame" x="50" y="0.0" width="50" height="60"/>
+                                                                <state key="normal" title="Button" image="ic_star_large"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-Yf-eDf">
+                                                                <rect key="frame" x="100" y="0.0" width="50" height="60"/>
+                                                                <state key="normal" title="Button" image="ic_star_large"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4sl-8m-Jfp">
+                                                                <rect key="frame" x="150" y="0.0" width="50" height="60"/>
+                                                                <state key="normal" title="Button" image="ic_star_large"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzF-dc-oLo">
+                                                                <rect key="frame" x="200" y="0.0" width="50" height="60"/>
+                                                                <state key="normal" title="Button" image="ic_star_large"/>
+                                                            </button>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="250" id="7Y8-2o-ubb"/>
+                                                        </constraints>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sq-5m-ICj">
-                                                        <rect key="frame" x="354" y="0.0" width="60" height="60"/>
+                                                        <rect key="frame" x="332" y="0.0" width="82" height="60"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="60" id="TN0-az-APQ"/>
                                                             <constraint firstAttribute="height" constant="60" id="UuO-vN-Gxh"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="l2m-ez-y69" firstAttribute="leading" secondItem="wyH-Np-YeV" secondAttribute="trailing" id="8G1-Zt-l02"/>
+                                                    <constraint firstItem="0Sq-5m-ICj" firstAttribute="leading" secondItem="l2m-ez-y69" secondAttribute="trailing" id="bf6-Dy-nET"/>
+                                                    <constraint firstItem="l2m-ez-y69" firstAttribute="centerX" secondItem="1Kv-BP-eer" secondAttribute="centerX" id="s31-fT-Ncy"/>
+                                                </constraints>
                                             </stackView>
                                         </subviews>
                                     </stackView>
@@ -908,13 +920,14 @@
                         <outlet property="gradeImage" destination="WvT-Rb-e9E" id="QjN-Rf-qh1"/>
                         <outlet property="nicknameField" destination="1fu-4h-UQN" id="IG4-o9-HxS"/>
                         <outlet property="rateLabel" destination="LWU-rL-bMX" id="7fs-j3-khx"/>
+                        <outlet property="ratingStars" destination="l2m-ez-y69" id="IIb-vo-xTe"/>
                         <outlet property="submitButton" destination="bv3-bH-yrX" id="ucG-Kc-n7d"/>
                         <outlet property="titleLabel" destination="TbT-ak-Y77" id="ghe-F7-sWe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gzB-mZ-cYj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4206" y="93"/>
+            <point key="canvasLocation" x="4205.7971014492759" y="92.410714285714278"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="VEa-ph-uFv">
