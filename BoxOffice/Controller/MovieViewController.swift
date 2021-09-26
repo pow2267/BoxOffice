@@ -246,9 +246,13 @@ extension MovieViewController: UITableViewDataSource {
             preconditionFailure("코멘트를 불러올 수 없음")
         }
         
+        guard let timestamp = comment.timestamp else {
+            preconditionFailure("코멘트가 작성된 날짜를 불러올 수 없음")
+        }
+        
         cell.nicknameLabel.text = comment.writer
         cell.commentLabel.text = comment.contents
-        cell.creationDateLabel.text = self.dateFormatter.string(from: NSDate(timeIntervalSince1970: comment.timestamp) as Date)
+        cell.creationDateLabel.text = self.dateFormatter.string(from: NSDate(timeIntervalSince1970: timestamp) as Date)
         
         // 별 이미지 초기화
         cell.star1.image = UIImage(named: "ic_star_large")

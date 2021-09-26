@@ -723,6 +723,9 @@
                                                 <rect key="frame" x="302" y="7" width="92" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="완료"/>
+                                                <connections>
+                                                    <action selector="touchUpSubmitButton" destination="U6N-pU-cnW" eventType="touchUpInside" id="RsH-aF-eOD"/>
+                                                </connections>
                                             </button>
                                         </barButtonItem>
                                     </navigationItem>

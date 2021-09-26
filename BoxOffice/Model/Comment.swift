@@ -18,9 +18,9 @@ struct CommentsResponse: Codable {
 }
 
 struct Comment: Codable {
-    let id: String
+    let id: String?
     let rating: Double
-    let timestamp: Double
+    let timestamp: Double?
     let writer: String
     let movieId: String
     let contents: String
