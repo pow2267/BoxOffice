@@ -788,27 +788,27 @@
                                                             <constraint firstAttribute="height" constant="60" id="wO5-X4-waD"/>
                                                         </constraints>
                                                     </view>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l2m-ez-y69" customClass="StarsStackView" customModule="BoxOffice" customModuleProvider="target">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l2m-ez-y69">
                                                         <rect key="frame" x="82" y="0.0" width="250" height="60"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbk-F7-E9j">
+                                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbk-F7-E9j">
                                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="60"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                 <state key="normal" title="Button" image="ic_star_large"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xtH-pc-Kp6">
+                                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xtH-pc-Kp6">
                                                                 <rect key="frame" x="50" y="0.0" width="50" height="60"/>
                                                                 <state key="normal" title="Button" image="ic_star_large"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-Yf-eDf">
+                                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-Yf-eDf">
                                                                 <rect key="frame" x="100" y="0.0" width="50" height="60"/>
                                                                 <state key="normal" title="Button" image="ic_star_large"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4sl-8m-Jfp">
+                                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4sl-8m-Jfp">
                                                                 <rect key="frame" x="150" y="0.0" width="50" height="60"/>
                                                                 <state key="normal" title="Button" image="ic_star_large"/>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzF-dc-oLo">
+                                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzF-dc-oLo">
                                                                 <rect key="frame" x="200" y="0.0" width="50" height="60"/>
                                                                 <state key="normal" title="Button" image="ic_star_large"/>
                                                             </button>
@@ -920,7 +920,7 @@
                         <outlet property="gradeImage" destination="WvT-Rb-e9E" id="QjN-Rf-qh1"/>
                         <outlet property="nicknameField" destination="1fu-4h-UQN" id="IG4-o9-HxS"/>
                         <outlet property="rateLabel" destination="LWU-rL-bMX" id="7fs-j3-khx"/>
-                        <outlet property="ratingStars" destination="l2m-ez-y69" id="IIb-vo-xTe"/>
+                        <outlet property="ratingStars" destination="l2m-ez-y69" id="JoQ-O9-SUe"/>
                         <outlet property="submitButton" destination="bv3-bH-yrX" id="ucG-Kc-n7d"/>
                         <outlet property="titleLabel" destination="TbT-ak-Y77" id="ghe-F7-sWe"/>
                     </connections>
