@@ -8,7 +8,6 @@
 import UIKit
 
 class TableViewCell: UITableViewCell {
-    
     @IBOutlet var posterView: UIImageView!
     @IBOutlet var movieLabel: UILabel!
     @IBOutlet var ratesImage: UIImageView!

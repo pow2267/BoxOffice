@@ -71,6 +71,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		76C0445D2701E75D00E35769 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				76D9C8EC26E7A0C0000E72D5 /* TableViewCell.swift */,
+				76D9C90026E8DB78000E72D5 /* CollectionViewCell.swift */,
+				76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		76D9C8CC26E7960B000E72D5 = {
 			isa = PBXGroup;
 			children = (
@@ -90,18 +100,16 @@
 		76D9C8D726E7960B000E72D5 /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
+				76C0445D2701E75D00E35769 /* View */,
 				76C0445026F3994C00E35769 /* Model */,
 				76D9C8FF26E8D742000E72D5 /* Controller */,
 				76D9C8D826E7960B000E72D5 /* AppDelegate.swift */,
 				76D9C8DA26E7960B000E72D5 /* SceneDelegate.swift */,
-				76D9C8EC26E7A0C0000E72D5 /* TableViewCell.swift */,
 				76D9C8DE26E7960B000E72D5 /* Main.storyboard */,
 				76D9C8E126E7960F000E72D5 /* Assets.xcassets */,
 				76D9C8E326E7960F000E72D5 /* LaunchScreen.storyboard */,
 				76D9C8E626E7960F000E72D5 /* Info.plist */,
 				76D9C8F026E7ADE7000E72D5 /* DataRequest.swift */,
-				76D9C90026E8DB78000E72D5 /* CollectionViewCell.swift */,
-				76C0444E26F38E4900E35769 /* CommentTableViewCell.swift */,
 				76C0445526FDCAD000E35769 /* UserInfo.swift */,
 			);
 			path = BoxOffice;
