@@ -14,7 +14,7 @@ class CommentViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var gradeImage: UIImageView!
     @IBOutlet weak var nicknameField: UITextField!
-    @IBOutlet weak var commentField: UITextField!
+    @IBOutlet weak var commentTextView: UITextView!
     @IBOutlet weak var rateLabel: UILabel!
     @IBOutlet weak var ratingStars: UIStackView!
     
@@ -23,6 +23,7 @@ class CommentViewController: UIViewController {
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
     let fullStar: String = "ic_star_large_full"
+    let placeholder: String = "한줄평을 작성해 주세요."
     
     @IBAction func touchUpSubmitButton() {
         let alert: UIAlertController = UIAlertController(title: "오류", message: "닉네임과 한줄평을 모두 작성해 주세요.", preferredStyle: .alert)
@@ -35,7 +36,7 @@ class CommentViewController: UIViewController {
             return
         }
         
-        guard let contents: String = self.commentField.text, contents.count > 0 else {
+        guard let contents: String = self.commentTextView.text, contents.count > 0 else {
             self.present(alert, animated: true, completion: nil)
             return
         }
@@ -123,6 +124,13 @@ class CommentViewController: UIViewController {
         }
         
         self.stars = stars
+        
+        self.commentTextView.layer.borderWidth = 1.0
+        self.commentTextView.layer.borderColor = UIColor.systemGray5.cgColor
+        self.commentTextView.layer.cornerRadius = 5.5
+        self.commentTextView.text = self.placeholder
+        self.commentTextView.textColor = UIColor.systemGray3
+        self.commentTextView.delegate = self
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -189,6 +197,22 @@ class CommentViewController: UIViewController {
                     star.setImage(UIImage(named: self.emptyStar), for: .normal)
                 }
             }
+        }
+    }
+}
+
+extension CommentViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.systemGray3 {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = self.placeholder
+            textView.textColor = UIColor.systemGray3
         }
     }
 }
