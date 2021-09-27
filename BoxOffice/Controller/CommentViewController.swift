@@ -20,6 +20,9 @@ class CommentViewController: UIViewController {
     
     var movie: Movie?
     var stars: [UIButton]?
+    let emptyStar: String = "ic_star_large"
+    let halfStar: String = "ic_star_large_half"
+    let fullStar: String = "ic_star_large_full"
     
     @IBAction func touchUpSubmitButton() {
         let alert: UIAlertController = UIAlertController(title: "오류", message: "닉네임과 한줄평을 모두 작성해 주세요.", preferredStyle: .alert)
@@ -99,6 +102,7 @@ class CommentViewController: UIViewController {
         }
         
         self.titleLabel.text = movie.title
+        
         switch movie.grade {
         case 12:
             self.gradeImage.image = UIImage(named: "ic_12")
@@ -156,13 +160,13 @@ class CommentViewController: UIViewController {
                 self.rateLabel.text = String(index * 2 + 1)
                 
                 for i in 0..<index {
-                    stars[i].setImage(UIImage(named: "ic_star_large_full"), for: .normal)
+                    stars[i].setImage(UIImage(named: self.fullStar), for: .normal)
                 }
                 
-                stars[index].setImage(UIImage(named: "ic_star_large_half"), for: .normal)
+                stars[index].setImage(UIImage(named: self.halfStar), for: .normal)
                 
                 for i in index+1..<stars.count {
-                    stars[i].setImage(UIImage(named: "ic_star_large"), for: .normal)
+                    stars[i].setImage(UIImage(named: self.emptyStar), for: .normal)
                 }
             }
             
@@ -170,11 +174,11 @@ class CommentViewController: UIViewController {
                 self.rateLabel.text = String(index * 2 + 2)
                 
                 for i in index+1..<stars.count {
-                    stars[i].setImage(UIImage(named: "ic_star_large"), for: .normal)
+                    stars[i].setImage(UIImage(named: self.emptyStar), for: .normal)
                 }
                 
                 for i in 0...index {
-                    stars[i].setImage(UIImage(named: "ic_star_large_full"), for: .normal)
+                    stars[i].setImage(UIImage(named: self.fullStar), for: .normal)
                 }
             }
             
@@ -182,7 +186,7 @@ class CommentViewController: UIViewController {
                 self.rateLabel.text = String(0)
                 
                 for star in stars {
-                    star.setImage(UIImage(named: "ic_star_large"), for: .normal)
+                    star.setImage(UIImage(named: self.emptyStar), for: .normal)
                 }
             }
         }
