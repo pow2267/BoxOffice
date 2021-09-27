@@ -13,6 +13,7 @@ class CollectionViewController: UIViewController {
 
     let collectionViewCellIdentifier: String = "collectionViewCell"
     var tabBar: TabBarController?
+    
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -20,7 +21,11 @@ class CollectionViewController: UIViewController {
     }()
     
     @objc func refresh() {
-        requestMovies(self.tabBar?.orderBy ?? 0)
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        requestMovies(tabBar.orderBy)
     }
     
     @IBAction func touchUpSettingIcon() {
@@ -56,7 +61,11 @@ class CollectionViewController: UIViewController {
     }
     
     @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let tabBar = self.tabBar, let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            return
+        }
+        
+        guard let tabBar = self.tabBar else {
             return
         }
         
@@ -116,8 +125,12 @@ class CollectionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.tabBar?.movies.count == 0 {
-            requestMovies(self.tabBar?.orderBy ?? 0)
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        if tabBar.movies.count == 0 {
+            requestMovies(tabBar.orderBy)
         }
     }
 
@@ -142,7 +155,11 @@ class CollectionViewController: UIViewController {
 
 extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.tabBar?.movies.count ?? 0
+        guard let tabBar = self.tabBar else {
+            preconditionFailure("탭바 정보를 찾을 수 없음")
+        }
+        
+        return tabBar.movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -173,7 +190,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         cell.posterView.image = nil
         
         DispatchQueue.global().async {
-            // Data는 동기 메소드라서 이미지를 불러올 때까지 동작이 멈추게 됨. 그럼 불편하니까 백그라운드 큐에 넣어줌
+            // Data는 동기 메소드라서 이미지를 불러올 때까지 앱이 프리징되는 걸 막기 위해 백그라운드 큐에 넣어줌
             guard let imageUrl: URL = URL(string: movie.thumb), let imageData: Data = try? Data(contentsOf: imageUrl) else {
                 return
             }
