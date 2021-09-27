@@ -35,6 +35,7 @@ class MovieViewController: UIViewController {
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
     let fullStar: String = "ic_star_large_full"
+    var alert: UIAlertController?
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
@@ -98,6 +99,14 @@ class MovieViewController: UIViewController {
     
     @objc func didReceiveCommentNotification(_ noti: Notification) {
         guard let comments: [Comment] = noti.userInfo?["comments"] as? [Comment] else {
+            DispatchQueue.main.async {
+                guard let alert = self.alert else {
+                    return
+                }
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            
             return
         }
         
@@ -110,10 +119,20 @@ class MovieViewController: UIViewController {
     
     @objc func didReceiveMovieInfoNotification(_ noti: Notification) {
         guard let movieInfo: MovieInfo = noti.userInfo?["movie"] as? MovieInfo else {
+            DispatchQueue.main.async {
+                guard let alert = self.alert else {
+                    return
+                }
+                
+                self.present(alert, animated: true, completion: nil)    
+            }
+            
             return
         }
         
         self.movieInfo = movieInfo
+        // 영화 정보 불러오는 데 성공했을 때만 한줄평을 불러오도록 여기서 요청
+        requestComments(movieInfo.id)
         
         DispatchQueue.global().async {
             guard let imageUrl: URL = URL(string: movieInfo.image), let imageData: Data = try? Data(contentsOf: imageUrl) else {
@@ -201,6 +220,19 @@ class MovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        guard let navigationController = self.navigationController else {
+            return
+        }
+        
+        let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오는 데 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "뒤로가기", style: .cancel, handler: { (action: UIAlertAction) in
+            navigationController.popViewController(animated: true)
+        })
+        
+        alert.addAction(cancelAction)
+        
+        self.alert = alert
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveCommentNotification(_:)), name: DidReceiveCommentNotification, object: nil)
         
@@ -209,7 +241,6 @@ class MovieViewController: UIViewController {
         }
         
         requestMovieInfo(movie.id)
-        requestComments(movie.id)
         
         let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
         self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)

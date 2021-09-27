@@ -62,6 +62,16 @@ class CollectionViewController: UIViewController {
     
     @objc func didReceiveMoviesNotification(_ noti: Notification) {
         guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            DispatchQueue.main.async {
+                let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오지 못했습니다.", preferredStyle: .alert)
+                let cancelAction: UIAlertAction = UIAlertAction(title: "다시 시도하기", style: .cancel, handler: { (action: UIAlertAction) in
+                    self.refresh()
+                })
+                
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
             return
         }
         

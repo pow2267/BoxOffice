@@ -20,7 +20,7 @@ func requestMovies(_ orderType: Int) {
     
     let dataTask: URLSessionDataTask = session.dataTask(with: url, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
         if let error = error {
-            print(error.localizedDescription)
+            print("MovieList: \(error.localizedDescription)")
             return
         }
 
@@ -34,7 +34,8 @@ func requestMovies(_ orderType: Int) {
             
             NotificationCenter.default.post(name: DidReceiveMoviesNotification, object: nil, userInfo: ["movies": apiResponse.movies])
         } catch (let err) {
-            print(err.localizedDescription)
+            print("MovieList: \(err.localizedDescription)")
+            NotificationCenter.default.post(name: DidReceiveMoviesNotification, object: nil, userInfo: nil)
         }
     })
     
@@ -50,7 +51,7 @@ func requestMovieInfo(_ id: String) {
     
     let dataTask: URLSessionDataTask = session.dataTask(with: url, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) in
         if let error = error {
-            print(error.localizedDescription)
+            print("Movie: \(error.localizedDescription)")
             return
         }
         
@@ -63,7 +64,8 @@ func requestMovieInfo(_ id: String) {
             
             NotificationCenter.default.post(name: DidReceiveMovieInfoNotification, object: nil, userInfo: ["movie": apiResponse])
         } catch (let err) {
-            print(err.localizedDescription)
+            print("Movie: \(err.localizedDescription)")
+            NotificationCenter.default.post(name: DidReceiveMovieInfoNotification, object: nil, userInfo: nil)
         }
     })
     
@@ -79,7 +81,7 @@ func requestComments(_ id: String) {
     
     let dataTask: URLSessionDataTask = session.dataTask(with: url, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) in
         if let error = error {
-            print(error.localizedDescription)
+            print("Comment: \(error.localizedDescription)")
             return
         }
         
@@ -92,7 +94,8 @@ func requestComments(_ id: String) {
             
             NotificationCenter.default.post(name: DidReceiveCommentNotification, object: nil, userInfo: ["comments": apiResponse.comments])
         } catch (let err) {
-            print(err.localizedDescription)
+            print("Comment: \(err.localizedDescription)")
+            NotificationCenter.default.post(name: DidReceiveCommentNotification, object: nil, userInfo: nil)
         }
     })
     
