@@ -32,6 +32,9 @@ class MovieViewController: UIViewController {
     var movie: Movie?
     var movieInfo: MovieInfo?
     var comments: [Comment]?
+    let emptyStar: String = "ic_star_large"
+    let halfStar: String = "ic_star_large_half"
+    let fullStar: String = "ic_star_large_full"
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
@@ -55,7 +58,6 @@ class MovieViewController: UIViewController {
         }
         
         commentViewController.movie = movie
-        
         self.present(commentViewController, animated: true, completion: nil)
     }
     
@@ -66,16 +68,16 @@ class MovieViewController: UIViewController {
     }
     
     @objc func touchUpMoviePoster() {
-        let newImageView = UIImageView()
-        newImageView.frame = UIScreen.main.bounds
-        newImageView.backgroundColor = UIColor.black
-        newImageView.contentMode = .scaleAspectFit
-        newImageView.isUserInteractionEnabled = true
+        let imageFullscreenView = UIImageView()
+        imageFullscreenView.frame = UIScreen.main.bounds
+        imageFullscreenView.backgroundColor = UIColor.black
+        imageFullscreenView.contentMode = .scaleAspectFit
+        imageFullscreenView.isUserInteractionEnabled = true
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
-        newImageView.addGestureRecognizer(gestureRecognizer)
+        imageFullscreenView.addGestureRecognizer(gestureRecognizer)
         
-        self.view.addSubview(newImageView)
+        self.view.addSubview(imageFullscreenView)
         self.navigationController?.isNavigationBarHidden = true
         self.tabBarController?.tabBar.isHidden = true
         
@@ -89,7 +91,7 @@ class MovieViewController: UIViewController {
                     return
                 }
 
-                newImageView.image = image
+                imageFullscreenView.image = image
             }
         }
     }
@@ -122,11 +124,9 @@ class MovieViewController: UIViewController {
                 self.posterImageView.image = UIImage(data: imageData)
             }
         }
-                
-        // Q. 왜 main 스레드에 넣어야 하나요?
+
         DispatchQueue.main.async {
             self.navigationItem.title = movieInfo.title
-                        
             self.titleLabel.text = movieInfo.title
             self.releaseDateLabel.text = movieInfo.releaseDate
             self.gerneLabel.text = movieInfo.genreAndDuration
@@ -146,50 +146,50 @@ class MovieViewController: UIViewController {
             }
             
             // reset stars
-            self.star1.image = UIImage(named: "ic_star_large")
-            self.star2.image = UIImage(named: "ic_star_large")
-            self.star3.image = UIImage(named: "ic_star_large")
-            self.star4.image = UIImage(named: "ic_star_large")
-            self.star5.image = UIImage(named: "ic_star_large")
+            self.star1.image = UIImage(named: self.emptyStar)
+            self.star2.image = UIImage(named: self.emptyStar)
+            self.star3.image = UIImage(named: self.emptyStar)
+            self.star4.image = UIImage(named: self.emptyStar)
+            self.star5.image = UIImage(named: self.emptyStar)
             
             if movieInfo.userRating >= 1.0 {
-                self.star1.image = UIImage(named: "ic_star_large_half")
+                self.star1.image = UIImage(named: self.halfStar)
             }
              
             if movieInfo.userRating >= 2.0 {
-                self.star1.image = UIImage(named: "ic_star_large_full")
+                self.star1.image = UIImage(named: self.fullStar)
             }
             
             if movieInfo.userRating >= 3.0 {
-                self.star2.image = UIImage(named: "ic_star_large_half")
+                self.star2.image = UIImage(named: self.halfStar)
             }
             
             if movieInfo.userRating >= 4.0 {
-                self.star2.image = UIImage(named: "ic_star_large_full")
+                self.star2.image = UIImage(named: self.fullStar)
             }
             
             if movieInfo.userRating >= 5.0 {
-                self.star3.image = UIImage(named: "ic_star_large_half")
+                self.star3.image = UIImage(named: self.halfStar)
             }
             
             if movieInfo.userRating >= 6.0 {
-                self.star3.image = UIImage(named: "ic_star_large_full")
+                self.star3.image = UIImage(named: self.fullStar)
             }
             
             if movieInfo.userRating >= 7.0 {
-                self.star4.image = UIImage(named: "ic_star_large_half")
+                self.star4.image = UIImage(named: self.halfStar)
             }
             
             if movieInfo.userRating >= 8.0 {
-                self.star4.image = UIImage(named: "ic_star_large_full")
+                self.star4.image = UIImage(named: self.fullStar)
             }
             
             if movieInfo.userRating >= 9.0 {
-                self.star5.image = UIImage(named: "ic_star_large_half")
+                self.star5.image = UIImage(named: self.halfStar)
             }
             
             if movieInfo.userRating == 10.0 {
-                self.star5.image = UIImage(named: "ic_star_large_full")
+                self.star5.image = UIImage(named: self.fullStar)
             }
             
             self.synopsis.text = movieInfo.synopsis
@@ -219,17 +219,6 @@ class MovieViewController: UIViewController {
         self.commentButton.addGestureRecognizer(commentButtonTapGestureRecognizer)
         self.commentButton.isUserInteractionEnabled = true
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension MovieViewController: UITableViewDataSource {
@@ -243,11 +232,11 @@ extension MovieViewController: UITableViewDataSource {
         }
         
         guard let comment = self.comments?[indexPath.row] else {
-            preconditionFailure("코멘트를 불러올 수 없음")
+            preconditionFailure("\(indexPath.row)번째 코멘트를 불러올 수 없음")
         }
         
         guard let timestamp = comment.timestamp else {
-            preconditionFailure("코멘트가 작성된 날짜를 불러올 수 없음")
+            preconditionFailure("\(indexPath.row)번째 코멘트가 작성된 날짜를 불러올 수 없음")
         }
         
         cell.nicknameLabel.text = comment.writer
@@ -255,50 +244,50 @@ extension MovieViewController: UITableViewDataSource {
         cell.creationDateLabel.text = self.dateFormatter.string(from: NSDate(timeIntervalSince1970: timestamp) as Date)
         
         // 별 이미지 초기화
-        cell.star1.image = UIImage(named: "ic_star_large")
-        cell.star2.image = UIImage(named: "ic_star_large")
-        cell.star3.image = UIImage(named: "ic_star_large")
-        cell.star4.image = UIImage(named: "ic_star_large")
-        cell.star5.image = UIImage(named: "ic_star_large")
+        cell.star1.image = UIImage(named: self.emptyStar)
+        cell.star2.image = UIImage(named: self.emptyStar)
+        cell.star3.image = UIImage(named: self.emptyStar)
+        cell.star4.image = UIImage(named: self.emptyStar)
+        cell.star5.image = UIImage(named: self.emptyStar)
         
         if comment.rating >= 1.0 {
-            cell.star1.image = UIImage(named: "ic_star_large_half")
+            cell.star1.image = UIImage(named: self.halfStar)
         }
          
         if comment.rating >= 2.0 {
-            cell.star1.image = UIImage(named: "ic_star_large_full")
+            cell.star1.image = UIImage(named: self.fullStar)
         }
         
         if comment.rating >= 3.0 {
-            cell.star2.image = UIImage(named: "ic_star_large_half")
+            cell.star2.image = UIImage(named: self.halfStar)
         }
         
         if comment.rating >= 4.0 {
-            cell.star2.image = UIImage(named: "ic_star_large_full")
+            cell.star2.image = UIImage(named: self.fullStar)
         }
         
         if comment.rating >= 5.0 {
-            cell.star3.image = UIImage(named: "ic_star_large_half")
+            cell.star3.image = UIImage(named: self.halfStar)
         }
         
         if comment.rating >= 6.0 {
-            cell.star3.image = UIImage(named: "ic_star_large_full")
+            cell.star3.image = UIImage(named: self.fullStar)
         }
         
         if comment.rating >= 7.0 {
-            cell.star4.image = UIImage(named: "ic_star_large_half")
+            cell.star4.image = UIImage(named: self.halfStar)
         }
         
         if comment.rating >= 8.0 {
-            cell.star4.image = UIImage(named: "ic_star_large_full")
+            cell.star4.image = UIImage(named: self.fullStar)
         }
         
         if comment.rating >= 9.0 {
-            cell.star5.image = UIImage(named: "ic_star_large_half")
+            cell.star5.image = UIImage(named: self.halfStar)
         }
         
         if comment.rating == 10.0 {
-            cell.star5.image = UIImage(named: "ic_star_large_full")
+            cell.star5.image = UIImage(named: self.fullStar)
         }
         
         return cell
