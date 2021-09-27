@@ -36,7 +36,7 @@ class CommentViewController: UIViewController {
             return
         }
         
-        guard let contents: String = self.commentTextView.text, contents.count > 0 else {
+        guard let contents: String = self.commentTextView.text, contents.count > 0, contents != self.placeholder else {
             self.present(alert, animated: true, completion: nil)
             return
         }
