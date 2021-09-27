@@ -41,7 +41,11 @@ class CommentViewController: UIViewController {
             return
         }
         
-        guard let rating: Double = Double(self.rateLabel.text ?? "0") else {
+        guard let rating: Double = Double(self.rateLabel.text ?? "0"), rating > 0 else {
+            let rateAlert: UIAlertController = UIAlertController(title: "오류", message: "별점은 1점 이상부터 입력 가능합니다.", preferredStyle: .alert)
+            rateAlert.addAction(cancelAction)
+            
+            self.present(rateAlert, animated: true, completion: nil)
             return
         }
         
@@ -118,6 +122,7 @@ class CommentViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
         self.touchStars(touches)
     }
     

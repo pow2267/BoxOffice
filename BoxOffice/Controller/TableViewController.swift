@@ -13,6 +13,7 @@ class TableViewController: UIViewController {
     
     let tableViewCellIdentifier: String = "tableViewCell"
     var tabBar: TabBarController?
+    
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -24,28 +25,32 @@ class TableViewController: UIViewController {
     }
     
     @IBAction func touchUpSettingIcon() {
-        self.showAlertController(style: UIAlertController.Style.actionSheet)
+        self.showAlertController(style: .actionSheet)
     }
     
     func showAlertController(style: UIAlertController.Style) {
         let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
         
-        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 0
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: .default, handler: { (action: UIAlertAction) in
+            tabBar.orderBy = 0
             requestMovies(0)
         })
         
-        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 1
+        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: .default, handler: { (action: UIAlertAction) in
+            tabBar.orderBy = 1
             requestMovies(1)
         })
         
-        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 2
+        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: .default, handler: { (action: UIAlertAction) in
+            tabBar.orderBy = 2
             requestMovies(2)
         })
         
-        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
         alertController.addAction(reservationRateAction)
         alertController.addAction(curationAction)
@@ -67,7 +72,11 @@ class TableViewController: UIViewController {
     }
     
     @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie], let tabBar = self.tabBar else {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            return
+        }
+        
+        guard let tabBar = self.tabBar else {
             return
         }
         
@@ -100,8 +109,12 @@ class TableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if self.tabBar?.movies.count == 0 {
-            requestMovies(self.tabBar?.orderBy ?? 0)
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        if tabBar.movies.count == 0 {
+            requestMovies(tabBar.orderBy)
         }
     }
     
@@ -126,7 +139,11 @@ class TableViewController: UIViewController {
 
 extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.tabBar?.movies.count ?? 0
+        guard let tabBar = self.tabBar else {
+            preconditionFailure("탭바 정보를 찾을 수 없음")
+        }
+        
+        return tabBar.movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
