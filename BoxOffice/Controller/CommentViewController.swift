@@ -181,12 +181,12 @@ class CommentViewController: UIViewController {
             if starFrameRight.contains(touch) {
                 self.rateLabel.text = String(index * 2 + 2)
                 
-                for i in index+1..<stars.count {
-                    stars[i].setImage(UIImage(named: self.emptyStar), for: .normal)
-                }
-                
                 for i in 0...index {
                     stars[i].setImage(UIImage(named: self.fullStar), for: .normal)
+                }
+                
+                for i in index+1..<stars.count {
+                    stars[i].setImage(UIImage(named: self.emptyStar), for: .normal)
                 }
             }
             
