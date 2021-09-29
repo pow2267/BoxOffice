@@ -17,11 +17,7 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var reservationRateLabel: UILabel!
     @IBOutlet weak var userRatingLabel: UILabel!
     @IBOutlet weak var audienceLabel: UILabel!
-    @IBOutlet weak var star1: UIImageView!
-    @IBOutlet weak var star2: UIImageView!
-    @IBOutlet weak var star3: UIImageView!
-    @IBOutlet weak var star4: UIImageView!
-    @IBOutlet weak var star5: UIImageView!
+    @IBOutlet weak var ratingStars: UIStackView!
     @IBOutlet weak var synopsis: UILabel!
     @IBOutlet weak var directors: UILabel!
     @IBOutlet weak var actors: UILabel!
@@ -31,6 +27,7 @@ class MovieViewController: UIViewController {
     
     var movie: Movie?
     var movieInfo: MovieInfo?
+    var stars: [UIImageView]?
     var comments: [Comment]?
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
@@ -154,51 +151,25 @@ class MovieViewController: UIViewController {
                 self.rateImage.image = UIImage(named: "ic_allages")
             }
             
-            // reset stars
-            self.star1.image = UIImage(named: self.emptyStar)
-            self.star2.image = UIImage(named: self.emptyStar)
-            self.star3.image = UIImage(named: self.emptyStar)
-            self.star4.image = UIImage(named: self.emptyStar)
-            self.star5.image = UIImage(named: self.emptyStar)
-            
-            if movieInfo.userRating >= 1.0 {
-                self.star1.image = UIImage(named: self.halfStar)
-            }
-             
-            if movieInfo.userRating >= 2.0 {
-                self.star1.image = UIImage(named: self.fullStar)
+            guard let stars = self.stars else {
+                return
             }
             
-            if movieInfo.userRating >= 3.0 {
-                self.star2.image = UIImage(named: self.halfStar)
+            // 소수점 버림
+            let fullStars = Int(movieInfo.userRating * 10 / 10) / 2
+            let halfStar = Int(movieInfo.userRating * 10 / 10) % 2
+            
+            // 별 이미지 초기화
+            for star in stars {
+                star.image = UIImage(named: self.emptyStar)
             }
             
-            if movieInfo.userRating >= 4.0 {
-                self.star2.image = UIImage(named: self.fullStar)
+            for i in 0..<fullStars {
+                stars[i].image = UIImage(named: self.fullStar)
             }
             
-            if movieInfo.userRating >= 5.0 {
-                self.star3.image = UIImage(named: self.halfStar)
-            }
-            
-            if movieInfo.userRating >= 6.0 {
-                self.star3.image = UIImage(named: self.fullStar)
-            }
-            
-            if movieInfo.userRating >= 7.0 {
-                self.star4.image = UIImage(named: self.halfStar)
-            }
-            
-            if movieInfo.userRating >= 8.0 {
-                self.star4.image = UIImage(named: self.fullStar)
-            }
-            
-            if movieInfo.userRating >= 9.0 {
-                self.star5.image = UIImage(named: self.halfStar)
-            }
-            
-            if movieInfo.userRating == 10.0 {
-                self.star5.image = UIImage(named: self.fullStar)
+            if halfStar == 1 {
+                stars[fullStars + halfStar - 1].image = UIImage(named: self.halfStar)
             }
         }
     }
@@ -222,6 +193,12 @@ class MovieViewController: UIViewController {
         guard let navigationController = self.navigationController else {
             return
         }
+        
+        guard let stars: [UIImageView] = self.ratingStars.subviews.filter({ $0 is UIImageView }) as? [UIImageView] else {
+            return
+        }
+        
+        self.stars = stars
         
         let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오는 데 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
         let cancelAction: UIAlertAction = UIAlertAction(title: "뒤로가기", style: .cancel, handler: { (action: UIAlertAction) in
@@ -269,51 +246,25 @@ extension MovieViewController: UITableViewDataSource {
         cell.commentLabel.text = comment.contents
         cell.creationDateLabel.text = self.dateFormatter.string(from: NSDate(timeIntervalSince1970: timestamp) as Date)
         
+        guard let stars: [UIImageView] = cell.stars.subviews.filter({ $0 is UIImageView }) as? [UIImageView] else {
+            preconditionFailure("테이블 뷰 셀 별점 오류")
+        }
+        
+        // 소수점 버림
+        let fullStars = Int(comment.rating * 10 / 10) / 2
+        let halfStar = Int(comment.rating * 10 / 10) % 2
+        
         // 별 이미지 초기화
-        cell.star1.image = UIImage(named: self.emptyStar)
-        cell.star2.image = UIImage(named: self.emptyStar)
-        cell.star3.image = UIImage(named: self.emptyStar)
-        cell.star4.image = UIImage(named: self.emptyStar)
-        cell.star5.image = UIImage(named: self.emptyStar)
-        
-        if comment.rating >= 1.0 {
-            cell.star1.image = UIImage(named: self.halfStar)
-        }
-         
-        if comment.rating >= 2.0 {
-            cell.star1.image = UIImage(named: self.fullStar)
+        for star in stars {
+            star.image = UIImage(named: self.emptyStar)
         }
         
-        if comment.rating >= 3.0 {
-            cell.star2.image = UIImage(named: self.halfStar)
+        for i in 0..<fullStars {
+            stars[i].image = UIImage(named: self.fullStar)
         }
         
-        if comment.rating >= 4.0 {
-            cell.star2.image = UIImage(named: self.fullStar)
-        }
-        
-        if comment.rating >= 5.0 {
-            cell.star3.image = UIImage(named: self.halfStar)
-        }
-        
-        if comment.rating >= 6.0 {
-            cell.star3.image = UIImage(named: self.fullStar)
-        }
-        
-        if comment.rating >= 7.0 {
-            cell.star4.image = UIImage(named: self.halfStar)
-        }
-        
-        if comment.rating >= 8.0 {
-            cell.star4.image = UIImage(named: self.fullStar)
-        }
-        
-        if comment.rating >= 9.0 {
-            cell.star5.image = UIImage(named: self.halfStar)
-        }
-        
-        if comment.rating == 10.0 {
-            cell.star5.image = UIImage(named: self.fullStar)
+        if halfStar == 1 {
+            stars[fullStars + halfStar - 1].image = UIImage(named: self.halfStar)
         }
         
         return cell

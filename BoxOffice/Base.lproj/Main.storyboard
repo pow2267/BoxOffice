@@ -620,11 +620,7 @@
                                                                     <outlet property="creationDateLabel" destination="Ehe-VG-DBP" id="jH3-17-kCP"/>
                                                                     <outlet property="nicknameLabel" destination="jOB-xc-rF3" id="bAj-nQ-TSg"/>
                                                                     <outlet property="profileImage" destination="C7A-vw-Hpp" id="c2z-km-GaO"/>
-                                                                    <outlet property="star1" destination="ufv-1N-b8X" id="cpg-60-drq"/>
-                                                                    <outlet property="star2" destination="mft-yr-4bR" id="7vy-qL-LSa"/>
-                                                                    <outlet property="star3" destination="onQ-uV-Opk" id="YEA-Wc-EWv"/>
-                                                                    <outlet property="star4" destination="fwJ-PP-QmM" id="FC6-3L-uPE"/>
-                                                                    <outlet property="star5" destination="JHP-A7-VNT" id="Rtd-J9-82Q"/>
+                                                                    <outlet property="stars" destination="bJU-QS-3ab" id="65i-Zp-rtz"/>
                                                                 </connections>
                                                             </tableViewCell>
                                                         </prototypes>
@@ -676,13 +672,9 @@
                         <outlet property="gerneLabel" destination="UWy-1h-AZn" id="Nfn-Gf-EFG"/>
                         <outlet property="posterImageView" destination="c7j-QN-lNr" id="iEK-fL-bj5"/>
                         <outlet property="rateImage" destination="JrQ-DC-Yvy" id="7KK-D4-Rst"/>
+                        <outlet property="ratingStars" destination="KAe-Tx-6Kz" id="vsE-ys-cZy"/>
                         <outlet property="releaseDateLabel" destination="rGf-A4-M9E" id="zbI-ac-VBj"/>
                         <outlet property="reservationRateLabel" destination="K3o-gb-xq8" id="aYi-go-km6"/>
-                        <outlet property="star1" destination="yC7-aS-AuL" id="8gq-cb-Urx"/>
-                        <outlet property="star2" destination="PAh-vs-MiD" id="sCc-Jd-ZAy"/>
-                        <outlet property="star3" destination="VMa-vS-73j" id="z8M-Vm-mjr"/>
-                        <outlet property="star4" destination="5kw-qL-HPe" id="3jN-aR-tLR"/>
-                        <outlet property="star5" destination="r04-DO-15h" id="Cm3-W4-akS"/>
                         <outlet property="synopsis" destination="B6B-Lm-zzo" id="wYb-i0-8Be"/>
                         <outlet property="tableView" destination="cMv-xw-W1G" id="F73-gY-JSS"/>
                         <outlet property="tableViewHeight" destination="opW-82-ELf" id="1tD-tk-zl3"/>
