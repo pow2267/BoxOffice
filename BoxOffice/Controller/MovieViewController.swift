@@ -27,7 +27,7 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var actors: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var commentButton: UIImageView!
+    @IBOutlet weak var commentButton: UIButton!
     
     var movie: Movie?
     var movieInfo: MovieInfo?
@@ -47,19 +47,6 @@ class MovieViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter
-    }
-    
-    @objc func touchUpCommentButton() {
-        guard let commentViewController = UIStoryboard.init(name: "Main", bundle: .main).instantiateViewController(identifier: "commentViewController") as? CommentViewController else {
-            return
-        }
-        
-        guard let movie = self.movie else {
-            return
-        }
-        
-        commentViewController.movie = movie
-        self.present(commentViewController, animated: true, completion: nil)
     }
     
     @objc func dismissFullscreen(_ sender: UITapGestureRecognizer) {
@@ -152,6 +139,9 @@ class MovieViewController: UIViewController {
             self.reservationRateLabel.text = movieInfo.reservation
             self.userRatingLabel.text = String(movieInfo.userRating)
             self.audienceLabel.text = self.numberFormatter.string(from: NSNumber(value: movieInfo.audience))
+            self.synopsis.text = movieInfo.synopsis
+            self.directors.text = movieInfo.director
+            self.actors.text = movieInfo.actor
             
             switch movieInfo.grade {
             case 12:
@@ -210,11 +200,20 @@ class MovieViewController: UIViewController {
             if movieInfo.userRating == 10.0 {
                 self.star5.image = UIImage(named: self.fullStar)
             }
-            
-            self.synopsis.text = movieInfo.synopsis
-            self.directors.text = movieInfo.director
-            self.actors.text = movieInfo.actor
         }
+    }
+    
+    @IBAction func touchUpCommentButton() {
+        guard let commentViewController = UIStoryboard.init(name: "Main", bundle: .main).instantiateViewController(identifier: "commentViewController") as? CommentViewController else {
+            return
+        }
+        
+        guard let movie = self.movie else {
+            return
+        }
+        
+        commentViewController.movie = movie
+        self.present(commentViewController, animated: true, completion: nil)
     }
 
     override func viewDidLoad() {
@@ -245,10 +244,6 @@ class MovieViewController: UIViewController {
         let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
         self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
         self.posterImageView.isUserInteractionEnabled = true
-        
-        let commentButtonTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpCommentButton))
-        self.commentButton.addGestureRecognizer(commentButtonTapGestureRecognizer)
-        self.commentButton.isUserInteractionEnabled = true
     }
 }
 

@@ -487,23 +487,26 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_compose" translatesAutoresizingMaskIntoConstraints="NO" id="kQK-u7-FxN">
-                                                                        <rect key="frame" x="369" y="0.0" width="20" height="20"/>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwN-og-b8a">
+                                                                        <rect key="frame" x="366" y="0.0" width="23" height="20"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="20" id="kcI-Jo-BJ5"/>
-                                                                            <constraint firstAttribute="width" constant="20" id="wuZ-Cf-Jfr"/>
+                                                                            <constraint firstAttribute="height" constant="20" id="LFs-Re-Cc8"/>
                                                                         </constraints>
-                                                                    </imageView>
+                                                                        <state key="normal" image="btn_compose"/>
+                                                                        <connections>
+                                                                            <action selector="touchUpCommentButton" destination="ZnB-eL-C0H" eventType="touchUpInside" id="p49-WF-8na"/>
+                                                                        </connections>
+                                                                    </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
                                                                     <constraint firstItem="gro-dS-LS6" firstAttribute="top" secondItem="RBR-rs-TyQ" secondAttribute="top" id="0fo-IJ-fnh"/>
                                                                     <constraint firstAttribute="bottom" secondItem="gro-dS-LS6" secondAttribute="bottom" id="3Z2-cE-XHz"/>
-                                                                    <constraint firstItem="kQK-u7-FxN" firstAttribute="top" secondItem="RBR-rs-TyQ" secondAttribute="top" id="4Vx-9L-e77"/>
                                                                     <constraint firstAttribute="trailing" secondItem="gro-dS-LS6" secondAttribute="trailing" constant="20" id="ALH-Ba-Vyj"/>
                                                                     <constraint firstItem="gro-dS-LS6" firstAttribute="leading" secondItem="RBR-rs-TyQ" secondAttribute="leading" constant="5" id="AMt-wQ-Y43"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="kQK-u7-FxN" secondAttribute="trailing" constant="5" id="W9G-cO-bkM"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="kQK-u7-FxN" secondAttribute="bottom" id="kVI-ZN-slj"/>
+                                                                    <constraint firstItem="fwN-og-b8a" firstAttribute="top" secondItem="RBR-rs-TyQ" secondAttribute="top" id="McF-8k-Y2n"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="fwN-og-b8a" secondAttribute="trailing" constant="5" id="emv-1r-Trg"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="fwN-og-b8a" secondAttribute="bottom" id="fmH-zq-n08"/>
                                                                     <constraint firstAttribute="height" constant="20" id="rTH-c2-qBi"/>
                                                                 </constraints>
                                                             </view>
@@ -668,7 +671,7 @@
                     <connections>
                         <outlet property="actors" destination="yzg-lA-oxw" id="nvF-aM-qol"/>
                         <outlet property="audienceLabel" destination="NoP-No-HS7" id="0Ta-Nm-ncN"/>
-                        <outlet property="commentButton" destination="kQK-u7-FxN" id="Rp2-Ci-dac"/>
+                        <outlet property="commentButton" destination="fwN-og-b8a" id="9Ic-BT-AoG"/>
                         <outlet property="directors" destination="f8t-da-k4v" id="7Ld-U4-13T"/>
                         <outlet property="gerneLabel" destination="UWy-1h-AZn" id="Nfn-Gf-EFG"/>
                         <outlet property="posterImageView" destination="c7j-QN-lNr" id="iEK-fL-bj5"/>
