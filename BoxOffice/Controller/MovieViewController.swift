@@ -93,6 +93,7 @@ class MovieViewController: UIViewController {
         
         if imageFullscreenView.isDescendant(of: self.view) {
             coordinator.animate(alongsideTransition: { (context) in
+                // 기기의 가로모드, 세로모드 변경 시 포스터 풀스크린의 레이아웃도 변경해줌
                 imageFullscreenView.frame = UIScreen.main.bounds
                 imageFullscreenView.setNeedsLayout()
             })
