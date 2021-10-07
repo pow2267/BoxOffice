@@ -20,8 +20,79 @@ class TableViewController: UIViewController {
         return refreshControl
     }()
     
-    @objc func refresh() {
-        requestMovies(self.tabBar?.orderBy ?? 0)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        guard let tabBar = self.tabBarController as? TabBarController else {
+            return
+        }
+        
+        self.tabBar = tabBar
+        self.setNavigationTitle(orderBy: tabBar.orderBy)
+        self.tableView.refreshControl = self.refreshControl
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNotification, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        if tabBar.movies.count == 0 {
+            requestMovies(tabBar.orderBy)
+        }
+    }
+    
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        guard let movieViewController = segue.destination as? MovieViewController else {
+            return
+        }
+        
+        guard let selectedCell: UITableViewCell = sender as? UITableViewCell, let index = self.tableView.indexPath(for: selectedCell) else {
+            return
+        }
+        
+        movieViewController.movie = tabBar.movies[index.row]
+    }
+    
+    @objc func didReceiveMoviesNotification(_ noti: Notification) {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            DispatchQueue.main.async {
+                let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오지 못했습니다.", preferredStyle: .alert)
+                let cancelAction: UIAlertAction = UIAlertAction(title: "다시 시도하기", style: .cancel, handler: { (action: UIAlertAction) in
+                    self.refresh()
+                })
+                
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            return
+        }
+        
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        tabBar.movies = movies
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.setNavigationTitle(orderBy: tabBar.orderBy)
+            
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
     
     @IBAction func touchUpSettingIcon() {
@@ -71,79 +142,8 @@ class TableViewController: UIViewController {
         }
     }
     
-    @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
-            DispatchQueue.main.async {
-                let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오지 못했습니다.", preferredStyle: .alert)
-                let cancelAction: UIAlertAction = UIAlertAction(title: "다시 시도하기", style: .cancel, handler: { (action: UIAlertAction) in
-                    self.refresh()
-                })
-                
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
-            }
-            
-            return
-        }
-        
-        guard let tabBar = self.tabBar else {
-            return
-        }
-        
-        tabBar.movies = movies
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.setNavigationTitle(orderBy: tabBar.orderBy)
-            
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        guard let tabBar = self.tabBarController as? TabBarController else {
-            return
-        }
-        
-        self.tabBar = tabBar
-        self.setNavigationTitle(orderBy: tabBar.orderBy)
-        self.tableView.refreshControl = self.refreshControl
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMoviesNotification(_:)), name: DidReceiveMoviesNotification, object: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        guard let tabBar = self.tabBar else {
-            return
-        }
-        
-        if tabBar.movies.count == 0 {
-            requestMovies(tabBar.orderBy)
-        }
-    }
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let tabBar = self.tabBar else {
-            return
-        }
-        
-        guard let movieViewController = segue.destination as? MovieViewController else {
-            return
-        }
-        
-        guard let selectedCell: UITableViewCell = sender as? UITableViewCell, let index = self.tableView.indexPath(for: selectedCell) else {
-            return
-        }
-        
-        movieViewController.movie = tabBar.movies[index.row]
+    @objc func refresh() {
+        requestMovies(self.tabBar?.orderBy ?? 0)
     }
 }
 

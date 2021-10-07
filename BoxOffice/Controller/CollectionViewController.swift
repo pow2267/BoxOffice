@@ -11,96 +11,14 @@ class CollectionViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
 
-    let collectionViewCellIdentifier: String = "collectionViewCell"
     var tabBar: TabBarController?
+    let collectionViewCellIdentifier: String = "collectionViewCell"
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return refreshControl
     }()
-    
-    @objc func refresh() {
-        guard let tabBar = self.tabBar else {
-            return
-        }
-        
-        requestMovies(tabBar.orderBy)
-    }
-    
-    @IBAction func touchUpSettingIcon() {
-        self.showAlertController(style: UIAlertController.Style.actionSheet)
-    }
-    
-    func showAlertController(style: UIAlertController.Style) {
-        let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
-        
-        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 0
-            requestMovies(0)
-        })
-        
-        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 1
-            requestMovies(1)
-        })
-        
-        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 2
-            requestMovies(2)
-        })
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
-        
-        alertController.addAction(reservationRateAction)
-        alertController.addAction(curationAction)
-        alertController.addAction(releaseDateAction)
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    @objc func didReceiveMoviesNotification(_ noti: Notification) {
-        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
-            DispatchQueue.main.async {
-                let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오지 못했습니다.", preferredStyle: .alert)
-                let cancelAction: UIAlertAction = UIAlertAction(title: "다시 시도하기", style: .cancel, handler: { (action: UIAlertAction) in
-                    self.refresh()
-                })
-                
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
-            }
-            
-            return
-        }
-        
-        guard let tabBar = self.tabBar else {
-            return
-        }
-        
-        tabBar.movies = movies
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-            self.setNavigationTitle(orderBy: tabBar.orderBy)
-            
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
-    
-    func setNavigationTitle(orderBy: Int) {
-        switch orderBy {
-        case 1:
-            self.navigationItem.title = "큐레이션"
-        case 2:
-            self.navigationItem.title = "개봉일"
-        default:
-            self.navigationItem.title = "예매율"
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -160,6 +78,88 @@ class CollectionViewController: UIViewController {
         }
         
         movieViewController.movie = tabBar.movies[index.row]
+    }
+    
+    @objc func didReceiveMoviesNotification(_ noti: Notification) {
+        guard let movies: [Movie] = noti.userInfo?["movies"] as? [Movie] else {
+            DispatchQueue.main.async {
+                let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오지 못했습니다.", preferredStyle: .alert)
+                let cancelAction: UIAlertAction = UIAlertAction(title: "다시 시도하기", style: .cancel, handler: { (action: UIAlertAction) in
+                    self.refresh()
+                })
+                
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            return
+        }
+        
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        tabBar.movies = movies
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            self.setNavigationTitle(orderBy: tabBar.orderBy)
+            
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
+    @IBAction func touchUpSettingIcon() {
+        self.showAlertController(style: UIAlertController.Style.actionSheet)
+    }
+    
+    func showAlertController(style: UIAlertController.Style) {
+        let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
+        
+        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.tabBar?.orderBy = 0
+            requestMovies(0)
+        })
+        
+        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.tabBar?.orderBy = 1
+            requestMovies(1)
+        })
+        
+        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
+            self.tabBar?.orderBy = 2
+            requestMovies(2)
+        })
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
+        
+        alertController.addAction(reservationRateAction)
+        alertController.addAction(curationAction)
+        alertController.addAction(releaseDateAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func setNavigationTitle(orderBy: Int) {
+        switch orderBy {
+        case 1:
+            self.navigationItem.title = "큐레이션"
+        case 2:
+            self.navigationItem.title = "개봉일"
+        default:
+            self.navigationItem.title = "예매율"
+        }
+    }
+    
+    @objc func refresh() {
+        guard let tabBar = self.tabBar else {
+            return
+        }
+        
+        requestMovies(tabBar.orderBy)
     }
 }
 

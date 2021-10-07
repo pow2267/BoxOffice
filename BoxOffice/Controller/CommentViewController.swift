@@ -20,81 +20,12 @@ class CommentViewController: UIViewController {
     
     var movie: Movie?
     var stars: [UIButton]?
+    
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
     let fullStar: String = "ic_star_large_full"
     let placeholder: String = "한줄평을 작성해 주세요."
     
-    @IBAction func touchUpSubmitButton() {
-        let alert: UIAlertController = UIAlertController(title: "오류", message: "닉네임과 한줄평을 모두 작성해 주세요.", preferredStyle: .alert)
-        let cancelAction: UIAlertAction = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
-        
-        alert.addAction(cancelAction)
-        
-        guard let nickname: String = self.nicknameField.text, nickname.count > 0 else {
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        guard let contents: String = self.commentTextView.text, contents.count > 0, contents != self.placeholder else {
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        guard let movieId: String = self.movie?.id else {
-            return
-        }
-        
-        guard let rating: Double = Double(self.rateLabel.text ?? "0"), rating > 0 else {
-            let rateAlert: UIAlertController = UIAlertController(title: "오류", message: "별점은 1점 이상부터 입력 가능합니다.", preferredStyle: .alert)
-            rateAlert.addAction(cancelAction)
-            
-            self.present(rateAlert, animated: true, completion: nil)
-            return
-        }
-        
-        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/comment") else {
-            return
-        }
-        
-        let session: URLSession = URLSession(configuration: .default)
-        var urlRequest: URLRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        
-        let comment = Comment(id: nil, rating: rating, timestamp: nil, writer: nickname, movieId: movieId, contents: contents)
-        
-        do {
-            let data = try JSONEncoder().encode(comment)
-            
-            let uploadTask: URLSessionUploadTask = session.uploadTask(with: urlRequest, from: data, completionHandler: {(data: Data?, urlResponse: URLResponse?, error: Error?) in
-                if let error = error {
-                    print(error.localizedDescription)
-                    DispatchQueue.main.async {
-                        let errorAlert: UIAlertController = UIAlertController(title: "한줄평 작성 오류", message: "오류가 발생해 한줄평 작성에 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
-                        
-                        errorAlert.addAction(cancelAction)
-                        self.present(errorAlert, animated: true, completion: nil)
-                    }
-                    return
-                } else {
-                    requestComments(movieId)
-                    UserInfo.shared.nickname = nickname
-                    DispatchQueue.main.async {
-                        self.touchUpCancelButton()
-                    }
-                }
-            })
-            
-            uploadTask.resume()
-        } catch (let err) {
-            print(err.localizedDescription)
-        }
-    }
-        
-    @IBAction func touchUpCancelButton() {
-        self.dismiss(animated: true, completion: nil)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -198,6 +129,76 @@ class CommentViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    @IBAction func touchUpSubmitButton() {
+        let alert: UIAlertController = UIAlertController(title: "오류", message: "닉네임과 한줄평을 모두 작성해 주세요.", preferredStyle: .alert)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+        
+        alert.addAction(cancelAction)
+        
+        guard let nickname: String = self.nicknameField.text, nickname.count > 0 else {
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        guard let contents: String = self.commentTextView.text, contents.count > 0, contents != self.placeholder else {
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        guard let movieId: String = self.movie?.id else {
+            return
+        }
+        
+        guard let rating: Double = Double(self.rateLabel.text ?? "0"), rating > 0 else {
+            let rateAlert: UIAlertController = UIAlertController(title: "오류", message: "별점은 1점 이상부터 입력 가능합니다.", preferredStyle: .alert)
+            rateAlert.addAction(cancelAction)
+            
+            self.present(rateAlert, animated: true, completion: nil)
+            return
+        }
+        
+        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/comment") else {
+            return
+        }
+        
+        let session: URLSession = URLSession(configuration: .default)
+        var urlRequest: URLRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        
+        let comment = Comment(id: nil, rating: rating, timestamp: nil, writer: nickname, movieId: movieId, contents: contents)
+        
+        do {
+            let data = try JSONEncoder().encode(comment)
+            
+            let uploadTask: URLSessionUploadTask = session.uploadTask(with: urlRequest, from: data, completionHandler: {(data: Data?, urlResponse: URLResponse?, error: Error?) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        let errorAlert: UIAlertController = UIAlertController(title: "한줄평 작성 오류", message: "오류가 발생해 한줄평 작성에 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
+                        
+                        errorAlert.addAction(cancelAction)
+                        self.present(errorAlert, animated: true, completion: nil)
+                    }
+                    return
+                } else {
+                    requestComments(movieId)
+                    UserInfo.shared.nickname = nickname
+                    DispatchQueue.main.async {
+                        self.touchUpCancelButton()
+                    }
+                }
+            })
+            
+            uploadTask.resume()
+        } catch (let err) {
+            print(err.localizedDescription)
+        }
+    }
+        
+    @IBAction func touchUpCancelButton() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

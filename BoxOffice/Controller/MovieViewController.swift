@@ -29,10 +29,11 @@ class MovieViewController: UIViewController {
     var movieInfo: MovieInfo?
     var stars: [UIImageView]?
     var comments: [Comment]?
+    var alert: UIAlertController?
+    
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
     let fullStar: String = "ic_star_large_full"
-    var alert: UIAlertController?
     
     var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
@@ -46,39 +47,40 @@ class MovieViewController: UIViewController {
         return dateFormatter
     }
     
-    @objc func dismissFullscreen(_ sender: UITapGestureRecognizer) {
-        self.navigationController?.isNavigationBarHidden = false
-        self.tabBarController?.tabBar.isHidden = false
-        sender.view?.removeFromSuperview()
-    }
-    
-    @objc func touchUpMoviePoster() {
-        let imageFullscreenView = UIImageView()
-        imageFullscreenView.frame = UIScreen.main.bounds
-        imageFullscreenView.backgroundColor = UIColor.black
-        imageFullscreenView.contentMode = .scaleAspectFit
-        imageFullscreenView.isUserInteractionEnabled = true
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
-        imageFullscreenView.addGestureRecognizer(gestureRecognizer)
-        
-        self.view.addSubview(imageFullscreenView)
-        self.navigationController?.isNavigationBarHidden = true
-        self.tabBarController?.tabBar.isHidden = true
-        
-        DispatchQueue.global().async {
-            guard let movieInfo = self.movieInfo, let imageUrl: URL = URL(string: movieInfo.image), let imageData: Data = try? Data(contentsOf: imageUrl) else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                guard let image = UIImage(data: imageData) else {
-                    return
-                }
-
-                imageFullscreenView.image = image
-            }
+        guard let navigationController = self.navigationController else {
+            return
         }
+        
+        guard let stars: [UIImageView] = self.ratingStars.subviews.filter({ $0 is UIImageView }) as? [UIImageView] else {
+            return
+        }
+        
+        self.stars = stars
+        
+        let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오는 데 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "뒤로가기", style: .cancel, handler: { (action: UIAlertAction) in
+            navigationController.popViewController(animated: true)
+        })
+        
+        alert.addAction(cancelAction)
+        
+        self.alert = alert
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveCommentNotification(_:)), name: DidReceiveCommentNotification, object: nil)
+        
+        guard let movie = self.movie else {
+            return
+        }
+        
+        requestMovieInfo(movie.id)
+        
+        let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
+        self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
+        self.posterImageView.isUserInteractionEnabled = true
     }
     
     @objc func didReceiveCommentNotification(_ noti: Notification) {
@@ -108,7 +110,7 @@ class MovieViewController: UIViewController {
                     return
                 }
                 
-                self.present(alert, animated: true, completion: nil)    
+                self.present(alert, animated: true, completion: nil)
             }
             
             return
@@ -174,6 +176,41 @@ class MovieViewController: UIViewController {
         }
     }
     
+    @objc func touchUpMoviePoster() {
+        let imageFullscreenView = UIImageView()
+        imageFullscreenView.frame = UIScreen.main.bounds
+        imageFullscreenView.backgroundColor = UIColor.black
+        imageFullscreenView.contentMode = .scaleAspectFit
+        imageFullscreenView.isUserInteractionEnabled = true
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
+        imageFullscreenView.addGestureRecognizer(gestureRecognizer)
+        
+        self.view.addSubview(imageFullscreenView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+        
+        DispatchQueue.global().async {
+            guard let movieInfo = self.movieInfo, let imageUrl: URL = URL(string: movieInfo.image), let imageData: Data = try? Data(contentsOf: imageUrl) else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                guard let image = UIImage(data: imageData) else {
+                    return
+                }
+
+                imageFullscreenView.image = image
+            }
+        }
+    }
+    
+    @objc func dismissFullscreen(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+        sender.view?.removeFromSuperview()
+    }
+    
     @IBAction func touchUpCommentButton() {
         guard let commentViewController = UIStoryboard.init(name: "Main", bundle: .main).instantiateViewController(identifier: "commentViewController") as? CommentViewController else {
             return
@@ -185,42 +222,6 @@ class MovieViewController: UIViewController {
         
         commentViewController.movie = movie
         self.present(commentViewController, animated: true, completion: nil)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        
-        guard let stars: [UIImageView] = self.ratingStars.subviews.filter({ $0 is UIImageView }) as? [UIImageView] else {
-            return
-        }
-        
-        self.stars = stars
-        
-        let alert: UIAlertController = UIAlertController(title: "오류", message: "데이터를 불러오는 데 실패했습니다. 다시 시도해 주세요.", preferredStyle: .alert)
-        let cancelAction: UIAlertAction = UIAlertAction(title: "뒤로가기", style: .cancel, handler: { (action: UIAlertAction) in
-            navigationController.popViewController(animated: true)
-        })
-        
-        alert.addAction(cancelAction)
-        
-        self.alert = alert
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveMovieInfoNotification(_:)), name: DidReceiveMovieInfoNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveCommentNotification(_:)), name: DidReceiveCommentNotification, object: nil)
-        
-        guard let movie = self.movie else {
-            return
-        }
-        
-        requestMovieInfo(movie.id)
-        
-        let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
-        self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
-        self.posterImageView.isUserInteractionEnabled = true
     }
 }
 
