@@ -118,26 +118,38 @@ class CollectionViewController: UIViewController {
     func showAlertController(style: UIAlertController.Style) {
         let alertController: UIAlertController = UIAlertController(title: "정렬 방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: style)
         
-        let reservationRateAction: UIAlertAction = UIAlertAction(title: "예매율", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 0
-            requestMovies(0)
-        })
+        guard let tabBar = self.tabBar else {
+            return
+        }
         
-        let curationAction: UIAlertAction = UIAlertAction(title: "큐레이션", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 1
-            requestMovies(1)
-        })
+        enum OrderType: Int, CaseIterable {
+            case ticketingRate = 0
+            case curation = 1
+            case openDate = 2
+            
+            var title: String {
+                switch self {
+                case .ticketingRate :
+                    return "예매율"
+                case .curation:
+                    return "큐레이션"
+                case .openDate:
+                    return "개봉일"
+                }
+            }
+        }
         
-        let releaseDateAction: UIAlertAction = UIAlertAction(title: "개봉일", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) in
-            self.tabBar?.orderBy = 2
-            requestMovies(2)
+        OrderType.allCases.forEach({ order in
+            let action = UIAlertAction(title: order.title, style: .default, handler: { (action: UIAlertAction) in
+                tabBar.orderBy = order.rawValue
+                requestMovies(order.rawValue)
+            })
+            
+            alertController.addAction(action)
         })
         
         let cancelAction: UIAlertAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel, handler: nil)
         
-        alertController.addAction(reservationRateAction)
-        alertController.addAction(curationAction)
-        alertController.addAction(releaseDateAction)
         alertController.addAction(cancelAction)
         
         self.present(alertController, animated: true, completion: nil)
