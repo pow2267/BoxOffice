@@ -30,6 +30,7 @@ class MovieViewController: UIViewController {
     var stars: [UIImageView]?
     var comments: [Comment]?
     var alert: UIAlertController?
+    var imageFullscreenView: UIImageView?
     
     let emptyStar: String = "ic_star_large"
     let halfStar: String = "ic_star_large_half"
@@ -81,6 +82,21 @@ class MovieViewController: UIViewController {
         let posterTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.touchUpMoviePoster))
         self.posterImageView.addGestureRecognizer(posterTapGestureRecognizer)
         self.posterImageView.isUserInteractionEnabled = true
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        guard let imageFullscreenView = self.imageFullscreenView else {
+            return
+        }
+        
+        if imageFullscreenView.isDescendant(of: self.view) {
+            coordinator.animate(alongsideTransition: { (context) in
+                imageFullscreenView.frame = UIScreen.main.bounds
+                imageFullscreenView.setNeedsLayout()
+            })
+        }
     }
     
     @objc func didReceiveCommentNotification(_ noti: Notification) {
@@ -177,13 +193,18 @@ class MovieViewController: UIViewController {
     }
     
     @objc func touchUpMoviePoster() {
-        let imageFullscreenView = UIImageView()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
+        
+        self.imageFullscreenView = UIImageView()
+        
+        guard let imageFullscreenView = self.imageFullscreenView else {
+            return
+        }
+
         imageFullscreenView.frame = UIScreen.main.bounds
         imageFullscreenView.backgroundColor = UIColor.black
         imageFullscreenView.contentMode = .scaleAspectFit
         imageFullscreenView.isUserInteractionEnabled = true
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissFullscreen(_:)))
         imageFullscreenView.addGestureRecognizer(gestureRecognizer)
         
         self.view.addSubview(imageFullscreenView)
