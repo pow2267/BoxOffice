@@ -86,18 +86,22 @@ class MovieViewController: UIViewController {
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        
-        guard let imageFullscreenView = self.imageFullscreenView else {
-            return
-        }
-        
-        if imageFullscreenView.isDescendant(of: self.view) {
-            coordinator.animate(alongsideTransition: { (context) in
-                // 기기의 가로모드, 세로모드 변경 시 포스터 풀스크린의 레이아웃도 변경해줌
+            
+        coordinator.animate(alongsideTransition: { (context) in
+            // 기기 회전 시 댓글이 잘리는 것 방지
+            self.tableView.reloadData()
+            
+            guard let imageFullscreenView = self.imageFullscreenView else {
+                return
+            }
+            
+            // 포스터 풀스크린 뷰가 화면에 띄워졌을 때
+            if imageFullscreenView.isDescendant(of: self.view) {
+                // 기기 회전 시 포스터 풀스크린의 레이아웃도 변경해줌
                 imageFullscreenView.frame = UIScreen.main.bounds
                 imageFullscreenView.setNeedsLayout()
-            })
-        }
+            }
+        })
     }
     
     @objc func didReceiveCommentNotification(_ noti: Notification) {
